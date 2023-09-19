@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 const app = require("./app");
 
-const connection = mongoose.connect(process.env.DB_CONTACTS, {
-  dbName: "db-contacts",
+const connection = mongoose.connect(process.env.WALLET_APP, {
+  dbName: "wallet-app",
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
