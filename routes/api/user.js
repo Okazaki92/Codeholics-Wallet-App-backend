@@ -4,17 +4,17 @@ const {
   signup,
   login,
   logout,
-  verifyToken,
+  verifyUserToken,
   currentUser,
   sendVerifyToken,
 } = require("../../controller/userController");
-const { auth } = require("../../middlewares/auth");
+const { auth } = require("../../middlewares/");
 
 router.post("/signup", signup);
 router.post("/login", login);
 router.post("/verify", sendVerifyToken);
 router.get("/logout", auth, logout);
-router.get("/verify/:verificationToken", verifyToken);
+router.get("/verify/:verificationToken", verifyUserToken);
 router.get("/current", currentUser);
 
 module.exports = router;

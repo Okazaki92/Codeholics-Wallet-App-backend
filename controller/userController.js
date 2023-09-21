@@ -3,6 +3,7 @@ require("dotenv").config();
 const { nanoid } = require("nanoid");
 const jwt = require("jsonwebtoken");
 
+const { ctrlWrapper, validation } = require("../middlewares");
 const { userSchema } = require("../schemas/userSchema");
 const { verificationEmail } = require("../utils/sendVerificationEmail");
 const {
@@ -15,19 +16,20 @@ const {
 
 const signup = async (req, res, next) => {
   try {
-    const validators = userSchema.validate(req.body);
-    if (validators.error?.message) {
-      return res.status(400).json({ message: validators.error.message });
-    }
+    validation(userSchema);
+
     const { email, password, firstName } = req.body;
 
     const hashPassword = await bcrypt.hash(password, 10);
+
+    //TODO const wallet = await createNewWallet
 
     const newUser = await addUser({
       email,
       password: hashPassword,
       firstName,
       verificationToken: nanoid(),
+      // TODO wallet:
     });
     verificationEmail(newUser.email, newUser.verificationToken);
     res.status(201).json({
@@ -44,10 +46,8 @@ const signup = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   try {
-    const validators = userSchema.validate(req.body);
-    if (validators.error?.message) {
-      return res.status(400).json({ message: validators.error.message });
-    }
+    validation(userSchema);
+
     const { email, password } = req.body;
 
     const user = await getUserByEmail(email);
@@ -95,7 +95,7 @@ const logout = async (req, res, next) => {
   }
 };
 
-const verifyToken = async (req, res, next) => {
+const verifyUserToken = async (req, res, next) => {
   try {
     const verificationToken = req.params;
     const user = await verifyToken(verificationToken, {
@@ -119,11 +119,10 @@ const verifyToken = async (req, res, next) => {
 
 const sendVerifyToken = async (req, res, next) => {
   try {
-    const validators = userSchema.validate(req.body);
+    validation(userSchema);
+
     const { email } = req.body;
-    if (validators.error?.message) {
-      return res.status(400).json({ message: validators.error.message });
-    }
+
     const user = await getUserByEmail({ email });
     if (!user) {
       return res.status(400).json({ message: "No user" });
@@ -173,7 +172,7 @@ module.exports = {
   signup,
   login,
   logout,
-  verifyToken,
+  verifyUserToken,
   sendVerifyToken,
   currentUser,
 };

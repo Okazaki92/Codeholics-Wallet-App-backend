@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-const { Wallet } = require("./wallet");
 
 const user = new Schema({
   firstName: {
@@ -16,6 +15,11 @@ const user = new Schema({
     type: String,
     required: [true, "Email is required"],
     unique: true,
+  },
+
+  wallet: {
+    type: Schema.Types.ObjectId,
+    ref: "Wallet",
   },
 
   token: {

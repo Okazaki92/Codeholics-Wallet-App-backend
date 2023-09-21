@@ -23,7 +23,7 @@ const getUserByEmail = ({ email }) => {
 
 const getUserById = ({ _id }) => {
   try {
-    return User.findById(_id);
+    return User.findById(_id);    //.populate("wallet")
   } catch (error) {
     return false;
   }
