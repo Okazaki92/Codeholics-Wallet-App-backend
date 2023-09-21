@@ -6,6 +6,7 @@ require("dotenv").config();
 const app = express();
 
 const userRouter = require("./routes/api/user");
+const transactionsRouter = require("./routes/api/transactions");
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use(express.static("public"));
 
 app.use("/api/users", userRouter);
+app.use("/api", transactionsRouter)
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
