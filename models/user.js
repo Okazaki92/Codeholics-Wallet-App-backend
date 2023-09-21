@@ -18,7 +18,6 @@ const user = new Schema({
     unique: true,
   },
 
-
   token: {
     type: String,
     default: null,
