@@ -7,11 +7,12 @@ const wallet = new Schema({
     require: true,
   },
 
-  transaction: {},
+  transaction: {
+    type: Schema.Types.ObjectId,
+    ref: "Transaction",
+  },
 
   category: {},
-
-  owner: {},
 });
 
 const Wallet = mongoose.model("wallet", wallet);

@@ -7,7 +7,6 @@ const userSchema = Joi.object({
   subscription: Joi.string(),
   token: Joi.string(),
   verificationToken: Joi.string(),
-  wallet: Joi.array(),
 });
 
 module.exports = { userSchema };
