@@ -24,7 +24,8 @@ const signup = async (req, res, next) => {
 
     const { email, password, firstName } = req.body;
 
-    const checkEmail = await getUserByEmail(email);
+    const checkEmail = await getUserByEmail({ email });
+
     if (checkEmail) {
       return res.status(409).json({
         message: "Email is already in use",
@@ -64,7 +65,7 @@ const login = async (req, res, next) => {
 
     const { email, password } = req.body;
 
-    const user = await getUserByEmail(email);
+    const user = await getUserByEmail({ email });
 
     const getWallet = await getWalletById(user.wallet);
 

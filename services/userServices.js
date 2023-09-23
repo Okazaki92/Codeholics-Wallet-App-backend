@@ -14,7 +14,7 @@ const addUser = ({ email, password, firstName, verificationToken, wallet }) => {
   }
 };
 
-const getUserByEmail = ({ email }) => {
+const getUserByEmail = ( email ) => {
   try {
     return User.findOne(email);
   } catch (error) {
