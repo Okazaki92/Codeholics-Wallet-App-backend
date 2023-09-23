@@ -1,15 +1,15 @@
 const { Transaction } = require("../models/transaction");
 
-const getTransactions = async (query) => {
+const getTransactions = async (query, userId) => {
   const page = parseInt(query.page) || 1;
   const limit = parseInt(query.limit) || 20;
   const startIndex = (page - 1) * limit;
 
-  return Transaction.find().skip(startIndex).limit(limit);
+  return Transaction.find({ owner: userId }).skip(startIndex).limit(limit);
 };
 
-const addTransaction = async (body) => {
-  return Transaction.create(body);
+const addTransaction = async (userId, body) => {
+  return Transaction.create({ owner: userId, ...body });
 };
 
 const removeTransaction = async (transactionId) => {
