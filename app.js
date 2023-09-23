@@ -6,6 +6,7 @@ require("dotenv").config();
 const app = express();
 
 const userRouter = require("./routes/api/user");
+const transactionsRouter = require("./routes/api/transactions");
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
@@ -15,6 +16,11 @@ app.use(express.json());
 app.use(express.static("public"));
 
 app.use("/api/users", userRouter);
+
+app.use("/api/transactions", transactionsRouter);
+
+// app.use("/api/categories", categoriesRouter) //TODO add categoriesRouter
+
 app.get("/", (req, res) => res.json({ version: "1.0" }));
 
 app.use((req, res) => {
