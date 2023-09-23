@@ -1,7 +1,11 @@
 const Joi = require("joi");
 
 const transactionSchema = Joi.object({
-  Date: Joi.date().required(),
+  Date: Joi.date().iso().raw().required().messages({
+    "date.base": "Date must be a valid ISO date (YYYY-MM-DD)",
+    "date.format": "Format must be YYYY-MM-DD",
+    "any.required": "Date is a required field",
+  }),
   Type: Joi.string().valid("income", "expense").required().messages({
     "string.base": "Type must be a string",
     "any.required": "Missing field Type transaction",

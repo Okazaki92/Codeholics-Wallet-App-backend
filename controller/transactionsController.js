@@ -2,9 +2,11 @@ const { transactionSchema } = require("../schemas/transactionSchema");
 const {
   getTransactions,
   addTransaction,
+  removeTransaction,
+  getTransactionWithId,
 } = require("../services/transactionsServices");
 
-const get = async (req, res, next) => {
+const getAllTransactions = async (req, res, next) => {
   const { query } = req;
   const results = await getTransactions(query);
 
@@ -17,17 +19,7 @@ const get = async (req, res, next) => {
   });
 };
 
-const getByCategory = async (req, res, next) => {
-
-
-};
-
-const getByMonthYear = async (req, res, next) => {
-
-
-};
-
-const create = async (req, res, next) => {
+const createTransaction = async (req, res, next) => {
   const validators = transactionSchema.validate(req.body);
   if (validators.error?.message) {
     return res.status(400).json({ message: validators.error.message });
@@ -45,7 +37,44 @@ const create = async (req, res, next) => {
   });
 };
 
+const getTransactionById = async (req, res, next) => {
+  const { query } = req;
+  const transactionId = req.params.transactionId;
+  const result = await getTransactionWithId(query, transactionId);
+  if (!result) {
+    return res.status(404).json({
+      status: "error",
+      code: 404,
+      message: "Transaction not found",
+    });
+  }
+  return res.status(200).json({
+    status: "ok",
+    code: 200,
+    data: { result },
+  });
+};
+
+const deleteTransaction = async (req, res, next) => {
+  const transactionId = req.params.transactionId;
+  const result = await removeTransaction(transactionId);
+  if (!result) {
+    return res.status(404).json({
+      status: "error",
+      code: 404,
+      message: "Transaction not found",
+    });
+  }
+  return res.status(200).json({
+    status: "ok",
+    code: 200,
+    message: "Transaction deleted",
+    data: { result },
+  });
+};
 module.exports = {
-  get,
-  create,
+  getAllTransactions,
+  createTransaction,
+  deleteTransaction,
+  getTransactionById,
 };
