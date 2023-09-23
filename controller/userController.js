@@ -14,22 +14,35 @@ const {
   updateUser,
 } = require("../services/userServices");
 
+const { createWallet, getWalletById } = require("../services/walletServices");
+
+const secret = process.env.SECRET;
+
 const signup = async (req, res, next) => {
   try {
     validation(userSchema);
 
     const { email, password, firstName } = req.body;
 
+    const checkEmail = await getUserByEmail(email);
+    if (checkEmail) {
+      return res.status(409).json({
+        message: "Email is already in use",
+      });
+    }
+
     const hashPassword = await bcrypt.hash(password, 10);
 
-    //TODO const wallet = await createNewWallet
+    const wallet = await createWallet({
+      balance: 0,
+    });
 
     const newUser = await addUser({
       email,
       password: hashPassword,
       firstName,
       verificationToken: nanoid(),
-      // TODO wallet:
+      wallet: wallet.id,
     });
     verificationEmail(newUser.email, newUser.verificationToken);
     res.status(201).json({
@@ -37,6 +50,7 @@ const signup = async (req, res, next) => {
       user: {
         email: newUser.email,
         firstName: newUser.firstName,
+        wallet,
       },
     });
   } catch (error) {
@@ -51,6 +65,9 @@ const login = async (req, res, next) => {
     const { email, password } = req.body;
 
     const user = await getUserByEmail(email);
+
+    const getWallet = await getWalletById(user.wallet);
+
     const passwordCompare = bcrypt.compare(password, user.password);
 
     if (!user || !passwordCompare) {
@@ -77,7 +94,7 @@ const login = async (req, res, next) => {
       user: {
         email: user.email,
         id: user.id,
-        firstName,
+        wallet: getWallet,
       },
     });
   } catch (error) {

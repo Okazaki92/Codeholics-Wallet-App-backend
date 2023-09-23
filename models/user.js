@@ -19,7 +19,7 @@ const user = new Schema({
 
   wallet: {
     type: Schema.Types.ObjectId,
-    ref: "Wallet",
+    ref: "wallet",
   },
 
   token: {

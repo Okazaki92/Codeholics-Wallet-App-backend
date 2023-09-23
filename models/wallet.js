@@ -3,16 +3,14 @@ const { Schema } = mongoose;
 
 const wallet = new Schema({
   balance: {
-    type: String,
+    type: Number,
     require: true,
   },
 
-  transaction: {
+  transactions: {
     type: Schema.Types.ObjectId,
-    ref: "Transaction",
+    ref: "transaction",
   },
-
-  category: {},
 });
 
 const Wallet = mongoose.model("wallet", wallet);

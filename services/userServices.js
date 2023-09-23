@@ -1,12 +1,13 @@
 const { User } = require("../models/user");
 
-const addUser = ({ email, password, firstName, verificationToken }) => {
+const addUser = ({ email, password, firstName, verificationToken, wallet }) => {
   try {
     return User.create({
       email,
       password,
       firstName,
       verificationToken,
+      wallet,
     });
   } catch (err) {
     return false;
@@ -23,7 +24,7 @@ const getUserByEmail = ({ email }) => {
 
 const getUserById = ({ _id }) => {
   try {
-    return User.findById(_id);    //.populate("wallet")
+    return User.findById(_id).populate("wallet");
   } catch (error) {
     return false;
   }
