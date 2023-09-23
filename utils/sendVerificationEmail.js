@@ -15,7 +15,12 @@ const verificationEmail = async (userEmail, verificationToken) => {
     from: "vincentslominski@proton.me",
     to: userEmail,
     subject: "E-mail verification",
-    html: `Please copy the link to verify your email: http://localhost:3000/api/users/verify/${verificationToken}`,
+    html: `
+      <p>Please click the link below to verify your email:</p>
+      <a href="https://codeholics-wallet-app-c8b1a2de9f25.herokuapp.com/api/users/verify/${verificationToken}">
+        Verify Email
+      </a>
+    `,
   };
 
   transport.sendMail(emailOptions).catch((err) => console.log(err));
