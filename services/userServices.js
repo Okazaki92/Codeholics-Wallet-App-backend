@@ -14,7 +14,7 @@ const addUser = ({ email, password, firstName, verificationToken, wallet }) => {
   }
 };
 
-const getUserByEmail = ( email ) => {
+const getUserByEmail = (email) => {
   try {
     return User.findOne(email);
   } catch (error) {
@@ -30,9 +30,9 @@ const getUserById = ({ _id }) => {
   }
 };
 
-const updateUser = ({ _id, body }) => {
+const updateUser = (_id, body) => {
   try {
-    return User.findByIdAndUpdate({ _id }, body, { new: true });
+    return User.findByIdAndUpdate(_id, body, { new: true });
   } catch (err) {
     return false;
   }
