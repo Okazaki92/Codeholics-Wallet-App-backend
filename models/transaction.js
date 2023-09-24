@@ -23,10 +23,10 @@ const transaction = new Schema(
       type: Number,
       required: [true, "Set value for Sum"],
     },
-    // owner: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: "user",
-    // },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "users",
+    },
   },
   {
     versionKey: false,
@@ -34,7 +34,7 @@ const transaction = new Schema(
   }
 );
 
-const Transaction = mongoose.model("transaction", transaction);
+const Transaction = mongoose.model("transaction", transaction, "transactions");
 
 module.exports = {
   Transaction,

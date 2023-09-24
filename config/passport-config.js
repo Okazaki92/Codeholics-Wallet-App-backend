@@ -18,7 +18,6 @@ passport.use(
         if (!user) {
           return done(new Error("User not found"));
         }
-
         return done(null, user);
       })
       .catch((err) => done(err));
