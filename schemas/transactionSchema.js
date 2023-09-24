@@ -1,7 +1,7 @@
 const Joi = require("joi");
 
 const transactionSchema = Joi.object({
-  Date: Joi.date().iso().raw().required().messages({
+  Date: Joi.date().iso().raw().messages({
     "date.base": "Date must be a valid ISO date (YYYY-MM-DD)",
     "date.format": "Format must be YYYY-MM-DD",
     "any.required": "Date is a required field",

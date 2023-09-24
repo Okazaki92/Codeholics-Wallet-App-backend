@@ -5,6 +5,7 @@ const {
   removeTransaction,
   getTransactionWithId,
 } = require("../services/transactionsServices");
+const { updateWalletBalance } = require("./walletController");
 
 const getAllTransactions = async (req, res, next) => {
   const { query } = req;
@@ -27,6 +28,15 @@ const createTransaction = async (req, res, next) => {
 
   const { body } = req;
   const newTransaction = await addTransaction(body);
+
+  const { wallet } = req.user;
+  await updateWalletBalance(wallet, newTransaction.Type, newTransaction.Sum);
+  console.log(
+    wallet,
+    newTransaction.Type,
+    newTransaction.Sum,
+    updateWalletBalance
+  );
 
   res.status(201).json({
     status: "success",
