@@ -9,7 +9,8 @@ const { updateWalletBalance } = require("./walletController");
 
 const getAllTransactions = async (req, res, next) => {
   const { query } = req;
-  const results = await getTransactions(query);
+  const userId = req.user.id;
+  const results = await getTransactions(query, userId);
 
   res.json({
     status: "success",
@@ -27,7 +28,8 @@ const createTransaction = async (req, res, next) => {
   }
 
   const { body } = req;
-  const newTransaction = await addTransaction(body);
+  const userId = req.user.id;
+  const newTransaction = await addTransaction(userId, body);
 
   const { wallet } = req.user;
   await updateWalletBalance(wallet, newTransaction.Type, newTransaction.Sum);

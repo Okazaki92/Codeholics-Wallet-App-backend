@@ -3,30 +3,30 @@ const { Schema } = mongoose;
 
 const transaction = new Schema(
   {
-    Date: {
+    date: {
       type: Date,
       default: Date.now,
       required: [true, "Set Date"],
     },
-    Type: {
-      type: String,
-      enum: ["income", "expense"],
-      required: [true, "Choose type transaction"],
+    income: {
+      type: Boolean,
+      default: false,
+      required: true, 
     },
-    Category: {
+    category: {
       type: String, // TODO Własne czy narzucone z enum
     },
-    Comment: {
+    comment: {
       type: String,
     },
-    Sum: {
+    sum: {
       type: Number,
       required: [true, "Set value for Sum"],
     },
-    // owner: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: "user",
-    // },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "users",
+    },
   },
   {
     versionKey: false,
@@ -34,7 +34,7 @@ const transaction = new Schema(
   }
 );
 
-const Transaction = mongoose.model("transaction", transaction);
+const Transaction = mongoose.model("transaction", transaction, "transactions");
 
 module.exports = {
   Transaction,
