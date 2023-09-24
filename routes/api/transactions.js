@@ -8,7 +8,7 @@ router
   .get("/", auth, transactionsController.getAllTransactions)
   .post("/", auth, transactionsController.createTransaction);
 router
-  .get("/:transactionId", transactionsController.getTransactionById) // TODO add auth because auth off for tests endpoints
-  .delete("/:transactionId", transactionsController.deleteTransaction); // TODO add auth because auth off for tests endpoints
-// .patch("/:transactionId",)
+  .get("/:transactionId", auth, transactionsController.getTransactionById)
+  .delete("/:transactionId", auth, transactionsController.deleteTransaction)
+  .patch("/:transactionId", auth, transactionsController.updateTransaction);
 module.exports = router;
