@@ -18,7 +18,7 @@ app.use(express.static("public"));
 
 app.use("/api/users", userRouter);
 
-app.use("/api/transactions", transactionsRouter);
+app.use("/api/transactions", transactionsRouter); 
 
 // app.use("/api/categories", categoriesRouter) //TODO add categoriesRouter
 
