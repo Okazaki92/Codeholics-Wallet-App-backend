@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
+const { Transaction } = require("./transaction");
 
 const wallet = new Schema({
   balance: {
@@ -7,10 +8,7 @@ const wallet = new Schema({
     require: true,
   },
 
-  transactions: {
-    type: Schema.Types.ObjectId,
-    ref: "transaction",
-  },
+  // transactions: [Transaction],
 });
 
 const Wallet = mongoose.model("wallet", wallet);
