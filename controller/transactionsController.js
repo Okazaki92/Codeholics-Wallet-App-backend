@@ -1,9 +1,11 @@
+const { validation } = require("../middlewares");
 const { transactionSchema } = require("../schemas/transactionSchema");
 const {
   getTransactions,
   addTransaction,
   removeTransaction,
   getTransactionWithId,
+  update,
 } = require("../services/transactionsServices");
 const { updateWalletBalance } = require("./walletController");
 
@@ -22,10 +24,7 @@ const getAllTransactions = async (req, res, next) => {
 };
 
 const createTransaction = async (req, res, next) => {
-  const validators = transactionSchema.validate(req.body);
-  if (validators.error?.message) {
-    return res.status(400).json({ message: validators.error.message });
-  }
+  validation(transactionSchema);
 
   const { body } = req;
   const userId = req.user.id;
@@ -44,9 +43,9 @@ const createTransaction = async (req, res, next) => {
 };
 
 const getTransactionById = async (req, res, next) => {
-  const { query } = req;
   const transactionId = req.params.transactionId;
-  const result = await getTransactionWithId(query, transactionId);
+  const userId = req.user.id;
+  const result = await getTransactionWithId(transactionId, userId);
   if (!result) {
     return res.status(404).json({
       status: "error",
@@ -63,7 +62,8 @@ const getTransactionById = async (req, res, next) => {
 
 const deleteTransaction = async (req, res, next) => {
   const transactionId = req.params.transactionId;
-  const result = await removeTransaction(transactionId);
+  const userId = req.user.id;
+  const result = await removeTransaction(transactionId, userId);
   if (!result) {
     return res.status(404).json({
       status: "error",
@@ -78,9 +78,30 @@ const deleteTransaction = async (req, res, next) => {
     data: { result },
   });
 };
+const updateTransaction = async (req, res, next) => {
+  validation(transactionSchema);
+  const { body } = req;
+  const userId = req.user.id;
+  const transactionId = req.params.transactionId;
+  const result = await update(transactionId, userId, body);
+  if (!result) {
+    return res.status(404).json({
+      status: "error",
+      code: 404,
+      message: "Transaction not found",
+    });
+  }
+  return res.status(200).json({
+    status: "ok",
+    code: 200,
+    message: "Transaction update",
+    data: { result },
+  });
+};
 module.exports = {
   getAllTransactions,
   createTransaction,
   deleteTransaction,
   getTransactionById,
+  updateTransaction,
 };

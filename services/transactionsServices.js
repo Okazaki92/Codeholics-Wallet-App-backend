@@ -12,18 +12,20 @@ const addTransaction = async (userId, body) => {
   return Transaction.create({ owner: userId, ...body });
 };
 
-const removeTransaction = async (transactionId) => {
-  return Transaction.findOneAndDelete({ _id: transactionId });
+const removeTransaction = async (transactionId, userId) => {
+  return Transaction.findOneAndDelete({ _id: transactionId, owner: userId });
 };
 
-const getTransactionWithId = async (query, transactionId) => {
-  const page = parseInt(query.page) || 1;
-  const limit = parseInt(query.limit) || 20;
-  const startIndex = (page - 1) * limit;
+const getTransactionWithId = async (transactionId, userId) => {
+  return Transaction.findOne({ _id: transactionId, owner: userId });
+};
 
-  return Transaction.findOne({ _id: transactionId })
-    .skip(startIndex)
-    .limit(limit);
+const update = async (transactionId, userId, body) => {
+  return Transaction.findOneAndUpdate(
+    { _id: transactionId, owner: userId },
+    { ...body },
+    { new: true }
+  );
 };
 
 module.exports = {
@@ -31,4 +33,5 @@ module.exports = {
   addTransaction,
   removeTransaction,
   getTransactionWithId,
+  update,
 };
