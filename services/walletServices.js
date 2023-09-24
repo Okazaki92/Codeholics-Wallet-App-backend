@@ -16,7 +16,7 @@ const getWalletById = ({ _id }) => {
   }
 };
 
-const updateWallet = ({ _id, body }) => {
+const updateWallet = (_id, body) => {
   try {
     return Wallet.findByIdAndUpdate(_id, body, { new: true });
   } catch (err) {

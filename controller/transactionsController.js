@@ -32,14 +32,8 @@ const createTransaction = async (req, res, next) => {
   const newTransaction = await addTransaction(userId, body);
 
   const { wallet } = req.user;
-  await updateWalletBalance(wallet, newTransaction.Type, newTransaction.Sum);
-  console.log(
-    wallet,
-    newTransaction.Type,
-    newTransaction.Sum,
-    updateWalletBalance
-  );
-
+  await updateWalletBalance(wallet, newTransaction.Type, newTransaction.sum);
+  
   res.status(201).json({
     status: "success",
     code: 201,

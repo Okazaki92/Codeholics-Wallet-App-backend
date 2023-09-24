@@ -6,18 +6,15 @@ const updateWalletBalance = async (
   transactionSum
 ) => {
   const currentWallet = await getWalletById(walletId);
-  console.log(currentWallet.balance);
   const balance = currentWallet.balance;
   let newBalance;
-  if (transactionType === "expense") {
+  if (!transactionType) {
     newBalance = balance - transactionSum;
   } else {
     newBalance = balance + transactionSum;
   }
 
-  await updateWallet(walletId, { balance: newBalance });
-  console.log(newBalance);
-  return newBalance;
+  return await updateWallet(walletId, { balance: newBalance });
 };
 
 module.exports = {
