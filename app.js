@@ -8,6 +8,7 @@ const app = express();
 
 const userRouter = require("./routes/api/user");
 const transactionsRouter = require("./routes/api/transactions");
+const categoriesRouter = require("./routes/api/categories");
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
@@ -20,7 +21,7 @@ app.use("/api/users", userRouter);
 
 app.use("/api/transactions", transactionsRouter); 
 
-// app.use("/api/categories", categoriesRouter) //TODO add categoriesRouter
+app.use("/api/categories",  categoriesRouter) //TODO add categoriesRouter
 
 app.get("/", (req, res) => res.json({ version: "1.0" }));
 
