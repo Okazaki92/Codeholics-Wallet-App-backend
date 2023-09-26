@@ -7,7 +7,11 @@ const {
   getTransactionWithId,
   update,
 } = require("../services/transactionsServices");
-const { updateWalletBalance } = require("./walletController");
+const {
+  updateBalanceAfterChange,
+  updateBalance,
+  updateBalanceAfterDelete,
+} = require("./userController");
 
 const getAllTransactions = async (req, res, next) => {
   const { query } = req;
@@ -28,15 +32,21 @@ const createTransaction = async (req, res, next) => {
 
   const { body } = req;
   const userId = req.user.id;
+  const balance = req.user.balance;
   const newTransaction = await addTransaction(userId, body);
 
-  const { wallet } = req.user;
-  await updateWalletBalance(wallet, newTransaction.Type, newTransaction.sum);
-  
+  // Update stanu konta
+  const newBalance = await updateBalance(
+    userId,
+    balance,
+    newTransaction.income,
+    newTransaction.sum
+  );
   res.status(201).json({
     status: "success",
     code: 201,
     data: {
+      balance: newBalance.balance,
       transaction: newTransaction,
     },
   });
@@ -63,6 +73,16 @@ const getTransactionById = async (req, res, next) => {
 const deleteTransaction = async (req, res, next) => {
   const transactionId = req.params.transactionId;
   const userId = req.user.id;
+  const balance = req.user.balance;
+  // Update stanu konta po usunięciu transakcji
+  const currentTransaction = await getTransactionWithId(transactionId, userId);
+  const newBalance = await updateBalanceAfterDelete(
+    userId,
+    balance,
+    currentTransaction.income,
+    currentTransaction.sum
+  );
+
   const result = await removeTransaction(transactionId, userId);
   if (!result) {
     return res.status(404).json({
@@ -71,10 +91,12 @@ const deleteTransaction = async (req, res, next) => {
       message: "Transaction not found",
     });
   }
+
   return res.status(200).json({
     status: "ok",
     code: 200,
     message: "Transaction deleted",
+    balance: newBalance.balance,
     data: { result },
   });
 };
@@ -82,7 +104,9 @@ const updateTransaction = async (req, res, next) => {
   validation(transactionSchema);
   const { body } = req;
   const userId = req.user.id;
+  // const balance = req.user.balance;
   const transactionId = req.params.transactionId;
+  // const oldSum = await getTransactionWithId(transactionId, userId)
   const result = await update(transactionId, userId, body);
   if (!result) {
     return res.status(404).json({
@@ -91,6 +115,15 @@ const updateTransaction = async (req, res, next) => {
       message: "Transaction not found",
     });
   }
+// console.log(balance, body.income);
+//   // Update stanu konta po aktualizacji
+//   await updateBalanceAfterChange(
+//     userId,
+//     balance,
+//     body.income,
+//     oldSum.sum,
+//     body.sum
+//   );
   return res.status(200).json({
     status: "ok",
     code: 200,

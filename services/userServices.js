@@ -22,7 +22,7 @@ const getUserByEmail = (email) => {
   }
 };
 
-const getUserById = ({ _id }) => {
+const getUserById = (_id) => {
   try {
     return User.findById(_id).populate("wallet");
   } catch (error) {
@@ -30,9 +30,9 @@ const getUserById = ({ _id }) => {
   }
 };
 
-const updateUser = (_id, body) => {
+const updateUser = (id, body) => {
   try {
-    return User.findByIdAndUpdate(_id, body, { new: true });
+    return User.findByIdAndUpdate(id, body, { new: true });
   } catch (err) {
     return false;
   }
