@@ -11,4 +11,5 @@ router
   .get("/:transactionId", auth, transactionsController.getTransactionById)
   .delete("/:transactionId", auth, transactionsController.deleteTransaction)
   .patch("/:transactionId", auth, transactionsController.updateTransaction);
+
 module.exports = router;
