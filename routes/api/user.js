@@ -15,6 +15,6 @@ router.post("/login", login);
 router.post("/verify", sendVerifyToken);
 router.get("/logout", auth, logout);
 router.get("/verify/:verificationToken", verifyUserToken);
-router.get("/current", currentUser);
+router.get("/current", auth, currentUser);
 
 module.exports = router;
