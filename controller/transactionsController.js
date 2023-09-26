@@ -32,7 +32,7 @@ const createTransaction = async (req, res, next) => {
 
   const { wallet } = req.user;
   await updateWalletBalance(wallet, newTransaction.Type, newTransaction.sum);
-  
+
   res.status(201).json({
     status: "success",
     code: 201,

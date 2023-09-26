@@ -15,11 +15,11 @@ const prepareMonth = (month) => {
     return month;
   } else return `0${month}`;
 };
-const getCategoriesUser = async (month, year, userId) => {
+
+const getTransactionsByDate = async (month, year, userId) => {
   const startDate = new Date(
     `${year}-${prepareMonth(month)}-01T00:00`
   ).toISOString();
-
   const endDate = configureEndDate(month, year).toISOString();
 
   return Transaction.find({
@@ -29,5 +29,5 @@ const getCategoriesUser = async (month, year, userId) => {
 };
 
 module.exports = {
-  getCategoriesUser,
+  getTransactionsByDate,
 };
