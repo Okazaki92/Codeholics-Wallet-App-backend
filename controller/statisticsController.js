@@ -1,6 +1,6 @@
-const {  getTransactionsByDate } = require("../services/categoriesServices");
+const {  getTransactionsByDate } = require("../services/statisticsServices");
 
-const getCategories = async (req, res, next) => {
+const getStatistics = async (req, res, next) => {
   const userId = req.user.id;
   const { month, year } = req.query;
 
@@ -35,5 +35,5 @@ const getCategories = async (req, res, next) => {
 };
 
 module.exports = {
-  getCategories,
+  getStatistics,
 };
