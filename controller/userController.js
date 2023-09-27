@@ -167,13 +167,14 @@ const currentUser = async (req, res, next) => {
       });
     }
 
-    const { email, name } = user;
+    const { email, name, balance } = user;
     res.status(201).json({
       data: {
         user: {
           id: _id,
           email,
           name,
+          balance
         },
       },
     });
