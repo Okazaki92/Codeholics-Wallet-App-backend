@@ -83,7 +83,7 @@ const updateTransaction = async (req, res, next) => {
   const { body } = req;
   const userId = req.user.id;
   const transactionId = req.params.transactionId;
-  const result = await update(transactionId, userId, body);
+  const result = await update(transactionId, userId, body); //
   if (!result) {
     return res.status(404).json({
       status: "error",
