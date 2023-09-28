@@ -96,17 +96,17 @@ const deleteTransaction = async (req, res, next) => {
     status: "ok",
     code: 200,
     message: "Transaction deleted",
-    balance: newBalance.balance,
-    data: { result },
+    data: { result, balance: newBalance.balance },
   });
 };
 const updateTransaction = async (req, res, next) => {
   validation(transactionSchema);
   const { body } = req;
   const userId = req.user.id;
-  // const balance = req.user.balance;
+  const balance = req.user.balance;
   const transactionId = req.params.transactionId;
-  // const oldSum = await getTransactionWithId(transactionId, userId)
+  const oldSum = await getTransactionWithId(transactionId, userId);
+  console.log(oldSum.sum);
   const result = await update(transactionId, userId, body);
   if (!result) {
     return res.status(404).json({
@@ -115,20 +115,20 @@ const updateTransaction = async (req, res, next) => {
       message: "Transaction not found",
     });
   }
-// console.log(balance, body.income);
-//   // Update stanu konta po aktualizacji
-//   await updateBalanceAfterChange(
-//     userId,
-//     balance,
-//     body.income,
-//     oldSum.sum,
-//     body.sum
-//   );
+  // Update stanu konta po aktualizacji
+  const newBalance = await updateBalanceAfterChange(
+    userId,
+    balance,
+    body.income,
+    oldSum.sum,
+    body.sum
+  );
+  console.log(body.income, oldSum.sum, body.sum, balance, newBalance);
   return res.status(200).json({
     status: "ok",
     code: 200,
     message: "Transaction update",
-    data: { result },
+    data: { result, balance: newBalance.balance },
   });
 };
 module.exports = {

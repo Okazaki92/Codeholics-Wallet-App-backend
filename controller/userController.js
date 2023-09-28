@@ -59,7 +59,7 @@ const login = async (req, res, next) => {
 
     const { email, password } = req.body;
 
-    const user = await getUserByEmail({ email });
+    const user = await getUserByEmail(email);
 
     const passwordCompare = bcrypt.compare(password, user.password);
 
@@ -76,18 +76,18 @@ const login = async (req, res, next) => {
     }
 
     const payload = {
-      id: user.id,
+      id: user._id,
       email: user.email,
     };
 
     const token = jwt.sign(payload, secret, { expiresIn: "1h" });
-    const update = await updateUser(user.id, token);
+    const update = await updateUser(user._id, { token });
     res.status(200).json({
       data: {
         token: update.token,
         user: {
           email: user.email,
-          id: user.id,
+          id: user._id,
           balance: user.balance,
         },
       },
@@ -174,7 +174,7 @@ const currentUser = async (req, res, next) => {
           id: _id,
           email,
           name,
-          balance
+          balance,
         },
       },
     });
@@ -229,7 +229,7 @@ const updateBalanceAfterChange = async (
     newBalance = balance - oldTransactionSum + transactionSum;
   }
 
-  return await updateWallet(userId, { balance: newBalance });
+  return await updateUser(userId, { balance: newBalance });
 };
 
 module.exports = {
