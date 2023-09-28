@@ -3,7 +3,7 @@ require("dotenv").config();
 const { nanoid } = require("nanoid");
 const jwt = require("jsonwebtoken");
 
-const { ctrlWrapper, validation } = require("../middlewares");
+const { validation } = require("../middlewares");
 const { userSchema } = require("../schemas/userSchema");
 const { verificationEmail } = require("../utils/sendVerificationEmail");
 const {
@@ -14,11 +14,9 @@ const {
   updateUser,
 } = require("../services/userServices");
 
-const { createWallet, getWalletById } = require("../services/walletServices");
-
 const secret = process.env.SECRET;
 
-const signup = async (req, res, next) => {
+const register = async (req, res, next) => {
   try {
     validation(userSchema);
 
@@ -34,24 +32,20 @@ const signup = async (req, res, next) => {
 
     const hashPassword = await bcrypt.hash(password, 10);
 
-    const wallet = await createWallet({
-      balance: 0,
-    });
-
     const newUser = await addUser({
       email,
       password: hashPassword,
       firstName,
       verificationToken: nanoid(),
-      wallet: wallet.id,
+      balance,
     });
     verificationEmail(newUser.email, newUser.verificationToken);
     res.status(201).json({
+      status: "success",
       message: "Registration successful",
-      user: {
+      data: {
         email: newUser.email,
-        firstName: newUser.firstName,
-        wallet,
+        name: newUser.name,
       },
     });
   } catch (error) {
@@ -65,9 +59,7 @@ const login = async (req, res, next) => {
 
     const { email, password } = req.body;
 
-    const user = await getUserByEmail({ email });
-
-    const getWallet = await getWalletById(user.wallet);
+    const user = await getUserByEmail(email);
 
     const passwordCompare = bcrypt.compare(password, user.password);
 
@@ -84,18 +76,20 @@ const login = async (req, res, next) => {
     }
 
     const payload = {
-      id: user.id,
+      id: user._id,
       email: user.email,
     };
 
     const token = jwt.sign(payload, secret, { expiresIn: "1h" });
-    await updateUser(user.id, { token });
+    const update = await updateUser(user._id, { token });
     res.status(200).json({
-      token,
-      user: {
-        email: user.email,
-        id: user.id,
-        wallet: getWallet,
+      data: {
+        token: update.token,
+        user: {
+          email: user.email,
+          id: user._id,
+          balance: user.balance,
+        },
       },
     });
   } catch (error) {
@@ -164,21 +158,24 @@ const sendVerifyToken = async (req, res, next) => {
 
 const currentUser = async (req, res, next) => {
   try {
-    const { _id } = req.user;
+    const _id = req.user;
 
-    const user = await getUserById({ _id });
+    const user = await getUserById(_id);
     if (!user) {
       return res.status(401).json({
         message: "Not authorized",
       });
     }
 
-    const { email, firstName } = user;
+    const { email, name, balance } = user;
     res.status(201).json({
-      user: {
-        id: _id,
-        email,
-        firstName,
+      data: {
+        user: {
+          id: _id,
+          email,
+          name,
+          balance,
+        },
       },
     });
   } catch (error) {
@@ -186,11 +183,63 @@ const currentUser = async (req, res, next) => {
   }
 };
 
+const updateBalance = async (
+  userId,
+  balance,
+  transactionType,
+  transactionSum
+) => {
+  let newBalance;
+  if (!transactionType) {
+    newBalance = balance - transactionSum;
+  } else {
+    newBalance = balance + transactionSum;
+  }
+
+  return await updateUser(userId, { balance: newBalance });
+};
+
+const updateBalanceAfterDelete = async (
+  userId,
+  balance,
+  transactionType,
+  transactionSum
+) => {
+  let newBalance;
+  if (transactionType) {
+    newBalance = balance - transactionSum;
+  } else {
+    newBalance = balance + transactionSum;
+  }
+
+  return await updateUser(userId, { balance: newBalance });
+};
+
+const updateBalanceAfterChange = async (
+  userId,
+  balance,
+  transactionType,
+  oldTransactionSum,
+  transactionSum
+) => {
+  let newBalance;
+  if (!transactionType) {
+    newBalance = balance + oldTransactionSum - transactionSum;
+  } else {
+    newBalance = balance - oldTransactionSum + transactionSum;
+  }
+
+  return await updateUser(userId, { balance: newBalance });
+};
+
 module.exports = {
-  signup,
+  register,
   login,
   logout,
   verifyUserToken,
   sendVerifyToken,
   currentUser,
+  updateBalance,
+  updateBalanceAfterChange,
+  updateBalanceAfterDelete,
 };
