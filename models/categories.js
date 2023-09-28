@@ -3,14 +3,24 @@ const { Schema } = mongoose;
 
 const category = new Schema(
   {
-    name: {
-      type: String,
-      require: true,
-    },
-    type: {
-      type: String,
-      default: "expense",
-    },
+    data: [
+      {
+        type: {
+          type: String,
+          default: "expense",
+          enum: ["expense"],
+          required: true,
+        },
+        name: {
+          type: String,
+          required: true,
+        },
+        color: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
   },
   {
     versionKey: false,
