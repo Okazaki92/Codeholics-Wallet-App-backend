@@ -106,7 +106,6 @@ const updateTransaction = async (req, res, next) => {
   const balance = req.user.balance;
   const transactionId = req.params.transactionId;
   const oldSum = await getTransactionWithId(transactionId, userId);
-  console.log(oldSum.sum);
   const result = await update(transactionId, userId, body);
   if (!result) {
     return res.status(404).json({
@@ -123,7 +122,7 @@ const updateTransaction = async (req, res, next) => {
     oldSum.sum,
     body.sum
   );
-  console.log(body.income, oldSum.sum, body.sum, balance, newBalance);
+  
   return res.status(200).json({
     status: "ok",
     code: 200,
