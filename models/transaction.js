@@ -14,7 +14,7 @@ const transaction = new Schema(
       required: true, 
     },
     category: {
-      type: String, // TODO Własne czy narzucone z enum
+      type: String, 
     },
     comment: {
       type: String,
