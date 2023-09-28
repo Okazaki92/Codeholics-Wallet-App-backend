@@ -11,20 +11,6 @@ const getCategories = async (req, res, next) => {
   });
 };
 
-const createCategory = async (req, res, next) => {
-  // walidacja danych
-  const { body } = req;
-  const newCategory = await create(body);
-  res.json({
-    status: "created",
-    code: 201,
-    data: {
-      newCategory,
-    },
-  });
-};
-
 module.exports = {
   getCategories,
-  createCategory,
 };
