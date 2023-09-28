@@ -43,11 +43,12 @@ const createTransaction = async (req, res, next) => {
     newTransaction.sum
   );
   res.status(201).json({
-    status: "success",
-    code: 201,
+    status: "created",
+    code: "201",
+    message: "Success! New transaction added.",
     data: {
-      balance: newBalance.balance,
       transaction: newTransaction,
+      balance: newBalance.balance,
     },
   });
 };

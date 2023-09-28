@@ -761,7 +761,7 @@
       },
       "get": {
         "tags": ["Transactions"],
-        "summary": "Get user's last 5 transactions",
+        "summary": "Get user transactions",
         "parameters": [
           {
             "in": "header",
