@@ -37,12 +37,14 @@ const register = async (req, res, next) => {
       password: hashPassword,
       name,
       verificationToken: nanoid(),
+      token: null,
     });
     verificationEmail(newUser.email, newUser.verificationToken);
     res.status(201).json({
       status: "success",
       message: "Registration successful",
       data: {
+        token: newUser.token,
         email: newUser.email,
         name: newUser.name,
       },
