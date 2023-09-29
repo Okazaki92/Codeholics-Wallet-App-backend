@@ -5,7 +5,7 @@ const userSchema = Joi.object({
   email: Joi.string().required(),
   password: Joi.string().required(),
   subscription: Joi.string(),
-  wallet: Joi.object(),
+  balance: Joi.number(),
   token: Joi.string(),
   verificationToken: Joi.string(),
 });
