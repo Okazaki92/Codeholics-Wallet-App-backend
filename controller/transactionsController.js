@@ -14,43 +14,53 @@ const {
 } = require("./userController");
 
 const getAllTransactions = async (req, res, next) => {
-  const { query } = req;
-  const userId = req.user.id;
-  const results = await getTransactions(query, userId);
+  try {
+    const { query } = req;
+    const userId = req.user.id;
+    const results = await getTransactions(query, userId);
 
-  res.json({
-    status: "success",
-    code: 200,
-    data: {
-      transactions: results,
-    },
-  });
+    res.json({
+      status: "Success",
+      code: 200,
+      message: "Success! Transactions received.",
+      data: {
+        transactions: results,
+      },
+    });
+  } catch (error) {
+    next(error);
+    // error dla 404 czy 401 czy oba z warunkiem ?
+  }
 };
 
 const createTransaction = async (req, res, next) => {
-  validation(transactionSchema);
+  try {
+    validation(transactionSchema);
 
-  const { body } = req;
-  const userId = req.user.id;
-  const balance = req.user.balance;
-  const newTransaction = await addTransaction(userId, body);
+    const { body } = req;
+    const userId = req.user.id;
+    const balance = req.user.balance;
+    const newTransaction = await addTransaction(userId, body);
 
-  // Update stanu konta
-  const newBalance = await updateBalance(
-    userId,
-    balance,
-    newTransaction.income,
-    newTransaction.sum
-  );
-  res.status(201).json({
-    status: "created",
-    code: "201",
-    message: "Success! New transaction added.",
-    data: {
-      transaction: newTransaction,
-      balance: newBalance.balance,
-    },
-  });
+    // Update stanu konta
+    const newBalance = await updateBalance(
+      userId,
+      balance,
+      newTransaction.income,
+      newTransaction.sum
+    );
+    res.status(201).json({
+      status: "Success",
+      code: "201",
+      message: "New transaction added.",
+      data: {
+        transaction: newTransaction,
+        balance: newBalance.balance,
+      },
+    });
+  } catch (error) {
+    next(error); // Jesli to 400 to trzeba zgrac ze swagger
+  } // w swagger mamy obsługe dla 404 ale tu sie chyba nie wydarzy 404 ?
 };
 
 const getTransactionById = async (req, res, next) => {
@@ -59,14 +69,15 @@ const getTransactionById = async (req, res, next) => {
   const result = await getTransactionWithId(transactionId, userId);
   if (!result) {
     return res.status(404).json({
-      status: "error",
+      status: "Error",
       code: 404,
-      message: "Transaction not found",
+      message: "Transaction Not found",
     });
   }
   return res.status(200).json({
-    status: "ok",
+    status: "Success",
     code: 200,
+    message: "Success ! Transaction received.",
     data: { result },
   });
 };
@@ -87,14 +98,14 @@ const deleteTransaction = async (req, res, next) => {
   const result = await removeTransaction(transactionId, userId);
   if (!result) {
     return res.status(404).json({
-      status: "error",
+      status: "Not Found",
       code: 404,
-      message: "Transaction not found",
+      message: "Transaction Not Found",
     });
   }
 
   return res.status(200).json({
-    status: "ok",
+    status: "Success",
     code: 200,
     message: "Transaction deleted",
     data: { result, balance: newBalance.balance },
@@ -110,7 +121,7 @@ const updateTransaction = async (req, res, next) => {
   const result = await update(transactionId, userId, body);
   if (!result) {
     return res.status(404).json({
-      status: "error",
+      status: "Not Found",
       code: 404,
       message: "Transaction not found",
     });
@@ -123,9 +134,9 @@ const updateTransaction = async (req, res, next) => {
     oldSum.sum,
     body.sum
   );
-  
+
   return res.status(200).json({
-    status: "ok",
+    status: "Success",
     code: 200,
     message: "Transaction update",
     data: { result, balance: newBalance.balance },
