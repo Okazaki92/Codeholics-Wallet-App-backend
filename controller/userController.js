@@ -20,7 +20,7 @@ const register = async (req, res, next) => {
   try {
     validation(userSchema);
 
-    const { email, password, firstName } = req.body;
+    const { email, password, name } = req.body;
 
     const checkEmail = await getUserByEmail({ email });
 
@@ -35,9 +35,8 @@ const register = async (req, res, next) => {
     const newUser = await addUser({
       email,
       password: hashPassword,
-      firstName,
+      name,
       verificationToken: nanoid(),
-      balance,
     });
     verificationEmail(newUser.email, newUser.verificationToken);
     res.status(201).json({
@@ -58,8 +57,9 @@ const login = async (req, res, next) => {
     validation(userSchema);
 
     const { email, password } = req.body;
+    console.log(password);
 
-    const user = await getUserByEmail(email);
+    const user = await getUserByEmail({ email });
 
     const passwordCompare = bcrypt.compare(password, user.password);
 
@@ -167,14 +167,15 @@ const currentUser = async (req, res, next) => {
       });
     }
 
-    const { email, name, balance } = user;
+    const { email, name, balance, id, token } = user;
     res.status(201).json({
       data: {
         user: {
-          id: _id,
+          id,
           email,
           name,
           balance,
+          token,
         },
       },
     });
