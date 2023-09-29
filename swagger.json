@@ -11,7 +11,7 @@
   },
   "servers": [
     {
-      "url": "https://codeholics-wallet-app-c8b1a2de9f25.herokuapp.com/",
+      "url": "http://localhost:3000",
       "description": "API base URL"
     }
   ],
@@ -194,6 +194,11 @@
                       "description": "responses code",
                       "example": "200"
                     },
+                    "message": {
+                      "type": "string",
+                      "description": "responses message",
+                      "example": "Welcome, John!"
+                    },
                     "data": {
                       "type": "object",
                       "description": "responses data",
@@ -354,7 +359,7 @@
         ],
         "security": [{ "bearerAuth": [] }],
         "responses": {
-          "204": {
+          "200": {
             "description": "Successful operation",
             "content": {
               "application/json": {
@@ -369,7 +374,12 @@
                     "code": {
                       "type": "string",
                       "description": "responses code",
-                      "example": "204"
+                      "example": "200"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "responses message",
+                      "example": "Success! User logout"
                     }
                   }
                 }
@@ -427,198 +437,6 @@
         }
       }
     },
-    "/api/verify/{verificationToken}": {
-      "get": {
-        "tags": ["Users"],
-        "summary": "User verify by token ",
-        "parameters": [
-          {
-            "in": "path",
-            "required": true,
-            "name": "verificationToken",
-            "description": "Verification token",
-            "schema": { "type": "string" }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "description": "responses status",
-                      "example": "success"
-                    },
-                    "code": {
-                      "type": "string",
-                      "description": "responses code",
-                      "example": "204"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Please relogin and try again"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Not found"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Try later please"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/current": {
-      "get": {
-        "tags": ["Users"],
-        "summary": "User verify by token ",
-        "parameters": [
-          {
-            "in": "header",
-            "required": true,
-            "name": "bearerAuth",
-            "description": "User's token",
-            "schema": { "type": "string" }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "description": "responses status",
-                      "example": "success"
-                    },
-                    "code": {
-                      "type": "string",
-                      "description": "responses code",
-                      "example": "204"
-                    },
-                    "user": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string",
-                      "example": "62e42ea67d8857b38579497d"
-                    },
-                    "email": {
-                      "type": "string",
-                      "example": "john@mail.com"
-                    },
-                    "name": {
-                      "type": "string",
-                      "example": "John"
-                    }
-                  }
-                }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Please relogin and try again"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Not found"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Try later please"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    
     "/api/transactions/": {
       "post": {
         "tags": ["Transactions"],
@@ -655,7 +473,7 @@
                     "status": {
                       "type": "string",
                       "description": "responses status",
-                      "example": "success"
+                      "example": "Success"
                     },
                     "code": {
                       "type": "string",
@@ -665,28 +483,20 @@
                     "message": {
                       "type": "string",
                       "description": "responses message",
-                      "example": "Success! New transaction added."
+                      "example": "New transaction added."
                     },
                     "data": {
                       "type": "object",
                       "description": "responses data",
-                      "example": {
-                        "result": {
-                          "amount": 99,
-                          "isIncome": false,
-                          "category": "Products",
-                          "categoryId": "2222222222",
-                          "date": "09-22-2023",
-                          "month": 9,
-                          "year": 2023,
-                          "comment": "Food",
-                          "balance": 3000,
-                          "owner": "",
-                          "_id": "",
-                          "createdAt": "2023-09-22T21:14:53.661Z",
-                          "updatedAt": "2023-09-22T21:14:53.661Z"
-                        }
-                      }
+                      "transaction": {
+                        "date": "28-09-2023",
+                        "income": false,
+                        "category": "Products",
+                        "comment": "Food",
+                        "sum": 500,
+                        "owner": "ObjectId"
+                      },
+                      "balance": 2000
                     }
                   }
                 }
@@ -716,6 +526,16 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Unauthorized"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "401"
+                    },
                     "message": {
                       "type": "string",
                       "example": "Please relogin and try again"
@@ -732,6 +552,16 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Not Found"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "404"
+                    },
                     "message": {
                       "type": "string",
                       "example": "Not found"
@@ -761,7 +591,7 @@
       },
       "get": {
         "tags": ["Transactions"],
-        "summary": "Get user's last 5 transactions",
+        "summary": "Get user transactions",
         "parameters": [
           {
             "in": "header",
@@ -783,7 +613,7 @@
                     "status": {
                       "type": "string",
                       "description": "responses status",
-                      "example": "success"
+                      "example": "Success"
                     },
                     "code": {
                       "type": "string",
@@ -885,6 +715,16 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Unauthorized"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "401"
+                    },
                     "message": {
                       "type": "string",
                       "example": "Please relogin and try again"
@@ -929,10 +769,10 @@
         }
       }
     },
-    "/api/transactions/categories": {
+    "/api/transactions/:transactionId": {
       "get": {
         "tags": ["Transactions"],
-        "summary": "Get categories",
+        "summary": "Get transaction",
         "parameters": [],
         "responses": {
           "200": {
@@ -945,7 +785,7 @@
                     "status": {
                       "type": "string",
                       "description": "responses status",
-                      "example": "success"
+                      "example": "Success"
                     },
                     "code": {
                       "type": "string",
@@ -954,72 +794,20 @@
                     },
                     "message": {
                       "type": "string",
-                      "description": "responses message",
-                      "example": "Success! Categories received."
+                      "example": "Success ! Transaction received"
                     },
                     "data": {
                       "type": "object",
                       "description": "responses data",
                       "example": {
                         "data": {
-                          "categories": {
-                            "income": [
-                              {
-                                "id": "11111111",
-                                "name": "Regular"
-                              },
-                              {
-                                "id": "1111122",
-                                "name": "Unregular"
-                              }
-                            ],
-                            "expense": [
-                              {
-                                "id": "2221111",
-                                "name": "Basic",
-                                "backgroundColor": "#FED057"
-                              },
-                              {
-                                "id": "22222222",
-                                "name": "Products",
-                                "backgroundColor": "#FFD8D0"
-                              },
-                              {
-                                "id": "22222333",
-                                "name": "Car",
-                                "backgroundColor": "#FD9498"
-                              },
-                              {
-                                "id": "22222444",
-                                "name": "Self",
-                                "backgroundColor": "#C5BAFF"
-                              },
-                              {
-                                "id": "22222555",
-                                "name": "Kids",
-                                "backgroundColor": "#6E78E8"
-                              },
-                              {
-                                "id": "2222266666",
-                                "name": "House",
-                                "backgroundColor": "#4A56E2"
-                              },
-                              {
-                                "id": "22222777",
-                                "name": "Education",
-                                "backgroundColor": "#81E1FF"
-                              },
-                              {
-                                "id": "22222888",
-                                "name": "Leisure",
-                                "backgroundColor": "#24CCA7"
-                              },
-                              {
-                                "id": "22222999",
-                                "name": "Other",
-                                "backgroundColor": "#00AD84"
-                              }
-                            ]
+                          "transaction": {
+                            "date": "28.09.2023",
+                            "income": "false",
+                            "category": "car",
+                            "comment": "change oil",
+                            "sum": 250,
+                            "owner": "ObjectId"
                           }
                         }
                       }
@@ -1036,9 +824,199 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Error"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "404"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Transaction Not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Try later please"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Transactions"],
+        "summary": "Update Transaction",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Success"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "200"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "responses message",
+                      "example": "Transaction update."
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "responses data",
+                      "example": {
+                        "data": {
+                          "transaction": {
+                            "date": "28.09.2023",
+                            "income": "false",
+                            "category": "car",
+                            "comment": "change oil",
+                            "sum": 250,
+                            "owner": "ObjectId"
+                          },
+                          "balance": 2000
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Not Found"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "200"
+                    },
                     "message": {
                       "type": "string",
                       "example": "Not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Try later please"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Transactions"],
+        "summary": "Delete transaction",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Success"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "200"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "responses message",
+                      "example": "Transaction deleted."
+                    },
+                    "data": {
+                      "transaction": {
+                        "date": "28.09.2023",
+                        "income": "false",
+                        "category": "car",
+                        "comment": "change oil",
+                        "sum": 250,
+                        "owner": "ObjectId"
+                      },
+                      "balance": 2000
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Not Found"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "404"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Transaction Not Found"
                     }
                   }
                 }
@@ -1103,7 +1081,7 @@
                     "status": {
                       "type": "string",
                       "description": "responses status",
-                      "example": "success"
+                      "example": "Success"
                     },
                     "code": {
                       "type": "string",
@@ -1120,48 +1098,16 @@
                       "description": "responses data",
                       "example": {
                         "data": {
-                          "month": 3,
-                          "year": 2023,
                           "result": [
                             {
-                              "_id": {
-                                "categoryId": "22222222",
-                                "category": "Products",
-                                "isIncome": false,
-                                "colorCategory": "#4A56E2"
-                              },
-                              "totalSum": 970
+                              "Products": 3000
                             },
                             {
-                              "_id": {
-                                "categoryId": "11111111",
-                                "category": "Regular",
-                                "isIncome": true,
-                                "colorCategory": "#4A56E2"
-                              },
-                              "totalSum": 999000
-                            },
-                            {
-                              "_id": {
-                                "categoryId": "22222444",
-                                "category": "Self",
-                                "isIncome": false,
-                                "colorCategory": "#4A56E2"
-                              },
-                              "totalSum": 500
-                            },
-                            {
-                              "_id": {
-                                "categoryId": "22222999",
-                                "category": "Other",
-                                "isIncome": false,
-                                "colorCategory": "#4A56E2"
-                              },
-                              "totalSum": 999
+                              "Car": 12000
                             }
                           ],
-                          "totalIncome": 999000,
-                          "totalExpense": 2469
+                          "expense": 15000,
+                          "income": 0
                         }
                       }
                     }
@@ -1177,6 +1123,16 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Unauthorized"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "401"
+                    },
                     "message": {
                       "type": "string",
                       "example": "Please relogin and try again"
@@ -1193,6 +1149,16 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Not Found"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "404"
+                    },
                     "message": {
                       "type": "string",
                       "example": "Not found"
@@ -1226,7 +1192,7 @@
     "schemas": {
       "User": {
         "type": "object",
-        "required": ["name", "email", "password", "verificationToken"],
+        "required": ["name", "email", "password"],
         "properties": {
           "_id": {
             "type": "string",
@@ -1251,44 +1217,25 @@
           "token": {
             "type": "string",
             "description": "User's token",
-            "default": "null",
             "example": "eyJhbGciOiJIUzI1NiIsInR5IkpXVCJ9.eyJpZCI6IjYyZTQyZWE2N2Q4ODU3YjM4NTc5NDk3ZCIsImlhdCI6MTY1OTEyNjg0NSw"
           },
           "balance": {
             "type": "number",
             "description": "User's balance",
             "example": 9890
-          },
-          "verify": {
-            "type": "boolean",
-            "description": "User's is verifed",
-            "default": "false",
-            "example": "true"
-          },
-          "verifyToken": {
-            "type": "number",
-            "description": "User's verification token",
-            "example": "j5UgPCe4mWzVsYmOr41B8"
           }
         }
       },
       "Transaction": {
         "type": "object",
-        "required": [
-          "amount",
-          "isIncome",
-          "category",
-          "categoryId",
-          "date",
-          "comment"
-        ],
+        "required": ["date", "income", "sum"],
         "properties": {
-          "amount": {
-            "type": "number",
-            "description": "Transaction's amount",
-            "example": 99
+          "_id": {
+            "type": "string",
+            "description": "Transaction's id",
+            "example": "62e44dcd1f01ddfdec6003"
           },
-          "isIncome": {
+          "income": {
             "type": "boolean",
             "description": "Transaction's bool",
             "example": "false"
@@ -1298,37 +1245,12 @@
             "description": "Transaction's category",
             "example": "Products"
           },
-          "categoryId": {
-            "type": "string",
-            "description": "Category's id",
-            "example": "2222222222"
-          },
-          "colorCategory": {
-            "type": "string",
-            "description": "Category's color",
-            "example": "#4A56E2"
-          },
-          "date": {
-            "type": "string",
-            "description": "Transaction's date",
-            "example": "07-29-2023"
-          },
-          "month": {
-            "type": "number",
-            "description": "Transaction's month",
-            "example": 9
-          },
-          "year": {
-            "type": "number",
-            "description": "Transaction's year",
-            "example": 2023
-          },
           "comment": {
             "type": "string",
             "description": "Transaction's comment",
             "example": "Salt"
           },
-          "balance": {
+          "sum": {
             "type": "number",
             "description": "User's balance after operation",
             "example": 3500
@@ -1338,10 +1260,10 @@
             "description": "Transaction's owner",
             "example": "62e42ea67d8857b38579497d"
           },
-          "_id": {
+          "date": {
             "type": "string",
-            "description": "Transaction's id",
-            "example": "62e44dcd1f01ddfdec6003"
+            "description": "Transaction's date",
+            "example": "2023-09-28"
           },
           "createdAt": {
             "type": "string",

@@ -1,11 +1,17 @@
-const {  getTransactionsByDate } = require("../services/statisticsServices");
+const { getTransactionsByDate } = require("../services/statisticsServices");
 
 const getStatistics = async (req, res, next) => {
   const userId = req.user.id;
   const { month, year } = req.query;
 
   const transactionsByDate = await getTransactionsByDate(month, year, userId);
-
+  if (!transactionsByDate) {
+    return res.status(404).json({
+      status: "Not Found",
+      code: "404",
+      message: "Not Found",
+    });
+  }
   const arrCategory = [];
   let expenses = 0;
   let income = 0;
@@ -27,9 +33,9 @@ const getStatistics = async (req, res, next) => {
   }
 
   return res.status(200).json({
-    status: "ok",
+    status: "Success",
     code: 200,
-    message: "testy",
+    message: "Success! Statistics received.",
     data: { arrCategory, expenses, income },
   });
 };
