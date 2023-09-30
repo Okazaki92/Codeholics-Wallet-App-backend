@@ -91,6 +91,7 @@ const login = async (req, res, next) => {
           email: user.email,
           id: user._id,
           balance: user.balance,
+          name: user.name,
         },
       },
     });
