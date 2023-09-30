@@ -7,6 +7,7 @@ const {
   getTransactionWithId,
   update,
 } = require("../services/transactionsServices");
+const { handle200, handle201, handle404 } = require("../utils/handleErrors");
 const {
   updateBalanceAfterChange,
   updateBalance,
@@ -18,14 +19,8 @@ const getAllTransactions = async (req, res, next) => {
     const { query } = req;
     const userId = req.user.id;
     const results = await getTransactions(query, userId);
-
-    res.json({
-      status: "Success",
-      code: 200,
-      message: "Success! Transactions received.",
-      data: {
-        transactions: results,
-      },
+    handle200(res, "Success! Transactions received.", {
+      transactions: results,
     });
   } catch (error) {
     next(error);
@@ -49,14 +44,9 @@ const createTransaction = async (req, res, next) => {
       newTransaction.income,
       newTransaction.sum
     );
-    res.status(201).json({
-      status: "Success",
-      code: "201",
-      message: "New transaction added.",
-      data: {
-        transaction: newTransaction,
-        balance: newBalance.balance,
-      },
+    handle201(res, "New transaction added.", {
+      transaction: newTransaction,
+      balance: newBalance.balance,
     });
   } catch (error) {
     next(error); // Jesli to 400 to trzeba zgrac ze swagger
@@ -68,18 +58,9 @@ const getTransactionById = async (req, res, next) => {
   const userId = req.user.id;
   const result = await getTransactionWithId(transactionId, userId);
   if (!result) {
-    return res.status(404).json({
-      status: "Error",
-      code: 404,
-      message: "Transaction Not found",
-    });
+    return handle404(res, "Transaction Not found");
   }
-  return res.status(200).json({
-    status: "Success",
-    code: 200,
-    message: "Success ! Transaction received.",
-    data: { result },
-  });
+  handle200(res, "Success ! Transaction received.", { result });
 };
 
 const deleteTransaction = async (req, res, next) => {
@@ -97,18 +78,11 @@ const deleteTransaction = async (req, res, next) => {
 
   const result = await removeTransaction(transactionId, userId);
   if (!result) {
-    return res.status(404).json({
-      status: "Not Found",
-      code: 404,
-      message: "Transaction Not Found",
-    });
+    return handle404(res, "Transaction Not Found");
   }
-
-  return res.status(200).json({
-    status: "Success",
-    code: 200,
-    message: "Transaction deleted",
-    data: { result, balance: newBalance.balance },
+  handle200(res, "Transaction deleted", {
+    result,
+    balance: newBalance.balance,
   });
 };
 const updateTransaction = async (req, res, next) => {
@@ -120,11 +94,7 @@ const updateTransaction = async (req, res, next) => {
   const oldSum = await getTransactionWithId(transactionId, userId);
   const result = await update(transactionId, userId, body);
   if (!result) {
-    return res.status(404).json({
-      status: "Not Found",
-      code: 404,
-      message: "Transaction not found",
-    });
+    return handle404(res, "Transaction not found");
   }
   // Update stanu konta po aktualizacji
   const newBalance = await updateBalanceAfterChange(
@@ -134,13 +104,7 @@ const updateTransaction = async (req, res, next) => {
     oldSum.sum,
     body.sum
   );
-
-  return res.status(200).json({
-    status: "Success",
-    code: 200,
-    message: "Transaction update",
-    data: { result, balance: newBalance.balance },
-  });
+  handle200(res, "Transaction update", { result, balance: newBalance.balance });
 };
 module.exports = {
   getAllTransactions,
