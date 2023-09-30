@@ -123,6 +123,7 @@ const verifyUserToken = async (req, res, next) => {
       return handle404(res, "User not found", user);
     }
     handle200(res, "Verification successful");
+    res.redirect("https://codeholics-wallet-app.netlify.app/login");
   } catch (error) {
     next(error);
   }

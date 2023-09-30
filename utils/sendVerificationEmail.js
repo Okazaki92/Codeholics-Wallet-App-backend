@@ -42,10 +42,17 @@ const verificationEmail = async (userEmail, verificationToken) => {
     to: userEmail,
     subject: "E-mail verification",
     html: `
-      <p>Please click the link below to verify your email:</p>
-      <a href="https://codeholics-wallet-app-c8b1a2de9f25.herokuapp.com/api/users/verify/${verificationToken}">
-        Verify Email
-      </a>
+      <div style="text-align: center;">
+        <h1>Codeholics Wallet App</h1>
+        <p>Please click the link below to verify your email:</p>
+        <a href="https://codeholics-wallet-app-c8b1a2de9f25.herokuapp.com/api/users/verify/${verificationToken}">
+          Verify Email
+        </a>
+        <br>
+        <div style="margin-top: 20px;">
+          <img src="https://codeholics-wallet-app.netlify.app/assets/loginPage-c16fb5fa.svg" alt="Verification Image" width="200">
+        </div>
+      </div>
     `,
   };
 
