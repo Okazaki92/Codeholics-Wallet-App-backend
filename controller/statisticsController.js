@@ -12,6 +12,7 @@ const getStatistics = async (req, res, next) => {
   const arrCategory = [];
   let expenses = 0;
   let income = 0;
+  let balance = 0;
   for (const transaction of transactionsByDate) {
     const Cat = transaction.category;
     const Sum = transaction.sum;
@@ -28,12 +29,13 @@ const getStatistics = async (req, res, next) => {
       income += Sum;
     }
   }
-handle200(res, "Success! Statistics received.", {
-  arrCategory,
-  expenses,
-  income,
-});
-
+  balance = income - expenses;
+  handle200(res, "Success! Statistics received.", {
+    arrCategory,
+    expenses,
+    income,
+    balance,
+  });
 };
 
 module.exports = {
