@@ -1,17 +1,15 @@
-const validation = (schema) => {
-  console.log("walidacja dziala");
-  return (req, res, next) => {
-    const { error } = schema.validate(req.body);
-    console.log("blad", error);
-    if (error) {
-      error.status = 400;
-      console.log("tttttt");
-      next(error);
-      return;
-    }
-    console.log("rrrrrr");
-    next();
-  };
+const validation = (req, res, schema) => {
+  const { error } = schema.validate(req.body);
+  if (error) {
+    return res.status(400).json({
+      statusText: "Bad Request",
+      code: 400,
+      ResponseBody: {
+        message: `Input data validation error: ${error.message}`,
+      },
+    });
+  }
+  
 };
 
 module.exports = validation;

@@ -4,7 +4,11 @@ const { nanoid } = require("nanoid");
 const jwt = require("jsonwebtoken");
 
 const { validation } = require("../middlewares");
-const { userSchema } = require("../schemas/userSchema");
+const {
+  userSchema,
+  loginSchema,
+  registerSchema,
+} = require("../schemas/userSchema");
 const { verificationEmail } = require("../utils/sendVerificationEmail");
 const {
   addUser,
@@ -27,7 +31,7 @@ const secret = process.env.SECRET;
 
 const register = async (req, res, next) => {
   try {
-    validation(userSchema);
+    validation(req, res, registerSchema);
 
     const { email, password, name } = req.body;
 
@@ -60,7 +64,7 @@ const register = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   try {
-    validation(userSchema);
+    validation(req, res, loginSchema);
 
     const { email, password } = req.body;
 
@@ -117,10 +121,6 @@ const verifyUserToken = async (req, res, next) => {
     });
     if (!user) {
       return handle404(res, "User not found", user);
-      // return res.status(404).json({
-      //   message: "User not found",
-      //   user,
-      // });
     }
     handle200(res, "Verification successful");
   } catch (error) {
@@ -130,7 +130,7 @@ const verifyUserToken = async (req, res, next) => {
 
 const sendVerifyToken = async (req, res, next) => {
   try {
-    validation(userSchema);
+    // validation(userSchema);
 
     const { email } = req.body;
 

@@ -11,10 +11,11 @@ const transaction = new Schema(
     income: {
       type: Boolean,
       default: false,
-      required: true, 
+      required: true,
     },
     category: {
-      type: String, 
+      type: String,
+      default: "other expenses",
     },
     comment: {
       type: String,
