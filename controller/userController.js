@@ -59,12 +59,10 @@ const login = async (req, res, next) => {
     validation(userSchema);
 
     const { email, password } = req.body;
-    console.log(password);
 
     const user = await getUserByEmail({ email });
 
-    const passwordCompare = bcrypt.compare(password, user.password);
-
+    const passwordCompare = await bcrypt.compare(password, user.password);
     if (!user || !passwordCompare) {
       return res.status(401).json({
         message: "Incorrect login or password",
