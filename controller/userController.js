@@ -173,13 +173,11 @@ const currentUser = async (req, res, next) => {
     const { email, name, balance, id, token } = user;
     res.status(201).json({
       data: {
-        user: {
-          id,
-          email,
-          name,
-          balance,
-          token,
-        },
+        id,
+        email,
+        name,
+        balance,
+        token,
       },
     });
   } catch (error) {
