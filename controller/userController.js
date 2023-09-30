@@ -31,7 +31,9 @@ const secret = process.env.SECRET;
 
 const register = async (req, res, next) => {
   try {
-    validation(req, res, registerSchema);
+    if (validation(req, res, registerSchema)) {
+      return;
+    }
 
     const { email, password, name } = req.body;
 
@@ -64,7 +66,9 @@ const register = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   try {
-    validation(req, res, loginSchema);
+    if (validation(req, res, loginSchema)) {
+      return;
+    }
 
     const { email, password } = req.body;
 

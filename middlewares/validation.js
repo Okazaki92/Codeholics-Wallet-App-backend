@@ -8,6 +8,8 @@ const validation = (req, res, schema) => {
         message: `Input data validation error: ${error.message}`,
       },
     });
+  } else {
+    return false;
   }
   
 };

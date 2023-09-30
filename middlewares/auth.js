@@ -7,11 +7,11 @@ const auth = (req, res, next) => {
       return res.status(401).json({
         status: "Unauthorized",
         code: "401",
-        message: `Unauthorized`,
+        message: `Unauthorized`, 
       });
     }
     req.user = user;
-    next();
+    next(); 
   })(req, res, next);
 };
 

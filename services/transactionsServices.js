@@ -2,7 +2,7 @@ const { Transaction } = require("../models/transaction");
 
 const getTransactions = async (query, userId) => {
   const page = parseInt(query.page) || 1;
-  const limit = parseInt(query.limit) || 20;
+  const limit = parseInt(query.limit) || 5;
   const startIndex = (page - 1) * limit;
 
   return Transaction.find({ owner: userId }).skip(startIndex).limit(limit);
