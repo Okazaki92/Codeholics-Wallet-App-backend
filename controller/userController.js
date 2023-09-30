@@ -63,7 +63,6 @@ const login = async (req, res, next) => {
     validation(userSchema);
 
     const { email, password } = req.body;
-    console.log(password);
 
     const user = await getUserByEmail({ email });
 
@@ -90,6 +89,7 @@ const login = async (req, res, next) => {
         email: user.email,
         id: user._id,
         balance: user.balance,
+        name: user.name,
       },
     });
   } catch (error) {
@@ -160,7 +160,7 @@ const currentUser = async (req, res, next) => {
 
     const { email, name, balance, id, token } = user;
     handle201(res, "", {
-      user: {
+      data: {
         id,
         email,
         name,
