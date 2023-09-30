@@ -160,13 +160,11 @@ const currentUser = async (req, res, next) => {
 
     const { email, name, balance, id, token } = user;
     handle201(res, "", {
-      data: {
-        id,
-        email,
-        name,
-        balance,
-        token,
-      },
+      id,
+      email,
+      name,
+      balance,
+      token,
     });
   } catch (error) {
     next(error);
