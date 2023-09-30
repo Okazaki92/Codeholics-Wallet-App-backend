@@ -30,7 +30,9 @@ const getAllTransactions = async (req, res, next) => {
 
 const createTransaction = async (req, res, next) => {
   try {
-    validation(req, res, transactionSchema);
+    if (validation(req, res, transactionSchema)) {
+      return;
+    }
 
     const { body } = req;
     const userId = req.user.id;
@@ -86,7 +88,9 @@ const deleteTransaction = async (req, res, next) => {
   });
 };
 const updateTransaction = async (req, res, next) => {
-  validation(req, res, transactionSchema);
+  if (validation(req, res, transactionSchema)) {
+    return;
+  }
   const { body } = req;
   const userId = req.user.id;
   const balance = req.user.balance;

@@ -36,7 +36,7 @@ const getStatistics = async (req, res, next) => {
     income,
     balance,
   });
-};
+}; 
 
 module.exports = {
   getStatistics,
