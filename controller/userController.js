@@ -13,6 +13,15 @@ const {
   verifyToken,
   updateUser,
 } = require("../services/userServices");
+const {
+  handle409,
+  handle201,
+  handle401,
+  handle200,
+  handle204,
+  handle404,
+  handle400,
+} = require("../utils/handleErrors");
 
 const secret = process.env.SECRET;
 
@@ -25,9 +34,7 @@ const register = async (req, res, next) => {
     const checkEmail = await getUserByEmail({ email });
 
     if (checkEmail) {
-      return res.status(409).json({
-        message: "Email is already in use",
-      });
+      return handle409(res, "Email is already in use");
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
@@ -40,14 +47,11 @@ const register = async (req, res, next) => {
       token: null,
     });
     verificationEmail(newUser.email, newUser.verificationToken);
-    res.status(201).json({
-      status: "success",
-      message: "Registration successful",
-      data: {
-        token: newUser.token,
-        email: newUser.email,
-        name: newUser.name,
-      },
+
+    handle201(res, "Registration successful", {
+      token: newUser.token,
+      email: newUser.email,
+      name: newUser.name,
     });
   } catch (error) {
     next(error);
@@ -63,18 +67,14 @@ const login = async (req, res, next) => {
 
     const user = await getUserByEmail({ email });
 
-    const passwordCompare = bcrypt.compare(password, user.password);
+    const passwordCompare = await bcrypt.compare(password, user.password);
 
     if (!user || !passwordCompare) {
-      return res.status(401).json({
-        message: "Incorrect login or password",
-      });
+      return handle401(res, "Incorrect login or password");
     }
 
     if (!user.verify) {
-      return res.status(401).json({
-        message: "email is not verifed",
-      });
+      return handle401(res, "email is not verifed");
     }
 
     const payload = {
@@ -84,17 +84,16 @@ const login = async (req, res, next) => {
 
     const token = jwt.sign(payload, secret, { expiresIn: "1h" });
     const update = await updateUser(user._id, { token });
-    res.status(200).json({
-      data: {
-        token: update.token,
-        user: {
-          email: user.email,
-          id: user._id,
-          balance: user.balance,
-        },
+    handle200(res, "", {
+      token: update.token,
+      user: {
+        email: user.email,
+        id: user._id,
+        balance: user.balance,
       },
     });
   } catch (error) {
+    console.log("uuuuuu");
     next(error);
   }
 };
@@ -103,7 +102,7 @@ const logout = async (req, res, next) => {
   try {
     const { _id } = req.user;
     await updateUser(_id, { token: null });
-    res.status(204).json({});
+    handle204(res);
   } catch (error) {
     next(error);
   }
@@ -117,15 +116,13 @@ const verifyUserToken = async (req, res, next) => {
       verificationToken: null,
     });
     if (!user) {
-      return res.status(404).json({
-        message: "User not found",
-        user,
-      });
+      return handle404(res, "User not found", user);
+      // return res.status(404).json({
+      //   message: "User not found",
+      //   user,
+      // });
     }
-    res.status(200).json({
-      code: 200,
-      message: "Verification successful",
-    });
+    handle200(res, "Verification successful");
   } catch (error) {
     next(error);
   }
@@ -139,20 +136,14 @@ const sendVerifyToken = async (req, res, next) => {
 
     const user = await getUserByEmail({ email });
     if (!user) {
-      return res.status(400).json({ message: "No user" });
+      return handle400(res, "No user");
     }
     if (user.verify) {
-      return res
-        .status(400)
-        .json({ message: "Verification has already been passed" });
+      return handle400(res, "Verification has already been passed");
     }
     const newVerifyToken = user.verificationToken;
     await verificationEmail(email, newVerifyToken);
-    res.status(200).json({
-      status: "success",
-      code: 200,
-      message: "Verification email sent",
-    });
+    handle200(res, "Verification email sent");
   } catch (error) {
     next(err);
   }
@@ -164,21 +155,17 @@ const currentUser = async (req, res, next) => {
 
     const user = await getUserById(_id);
     if (!user) {
-      return res.status(401).json({
-        message: "Not authorized",
-      });
+      return handle401(res, "Not authorized");
     }
 
     const { email, name, balance, id, token } = user;
-    res.status(201).json({
-      data: {
-        user: {
-          id,
-          email,
-          name,
-          balance,
-          token,
-        },
+    handle201(res, "", {
+      user: {
+        id,
+        email,
+        name,
+        balance,
+        token,
       },
     });
   } catch (error) {

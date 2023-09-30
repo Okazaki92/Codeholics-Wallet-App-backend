@@ -1,4 +1,5 @@
 const { getTransactionsByDate } = require("../services/statisticsServices");
+const { handle404, handle200 } = require("../utils/handleErrors");
 
 const getStatistics = async (req, res, next) => {
   const userId = req.user.id;
@@ -6,11 +7,7 @@ const getStatistics = async (req, res, next) => {
 
   const transactionsByDate = await getTransactionsByDate(month, year, userId);
   if (!transactionsByDate) {
-    return res.status(404).json({
-      status: "Not Found",
-      code: "404",
-      message: "Not Found",
-    });
+    return handle404(res, "Not Found");
   }
   const arrCategory = [];
   let expenses = 0;
@@ -31,13 +28,12 @@ const getStatistics = async (req, res, next) => {
       income += Sum;
     }
   }
+handle200(res, "Success! Statistics received.", {
+  arrCategory,
+  expenses,
+  income,
+});
 
-  return res.status(200).json({
-    status: "Success",
-    code: 200,
-    message: "Success! Statistics received.",
-    data: { arrCategory, expenses, income },
-  });
 };
 
 module.exports = {

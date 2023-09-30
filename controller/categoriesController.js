@@ -1,13 +1,10 @@
 const { getAll, create } = require("../services/categoriesServices");
+const { handle200 } = require("../utils/handleErrors");
 
 const getCategories = async (req, res, next) => {
   const categories = await getAll();
-  res.json({
-    status: "success",
-    code: 200,
-    data: {
-      categories,
-    },
+  handle200(res, "", {
+    categories,
   });
 };
 
