@@ -1,5 +1,5 @@
 {
-  "openapi": "3.1.0",
+  "openapi": "3.0.0",
   "info": {
     "version": "1.0.1",
     "title": "WalletAPI",
@@ -354,10 +354,16 @@
             "required": true,
             "name": "bearerAuth",
             "description": "User's token",
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string"
+            }
           }
         ],
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -447,10 +453,16 @@
             "required": true,
             "name": "bearerAuth",
             "description": "User's token",
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string"
+            }
           }
         ],
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "description": "Transaction's object",
           "required": true,
@@ -488,15 +500,17 @@
                     "data": {
                       "type": "object",
                       "description": "responses data",
-                      "transaction": {
-                        "date": "28-09-2023",
-                        "income": false,
-                        "category": "Products",
-                        "comment": "Food",
-                        "sum": 500,
-                        "owner": "ObjectId"
-                      },
-                      "balance": 2000
+                      "example": {
+                        "transaction": {
+                          "date": "28-09-2023",
+                          "income": false,
+                          "category": "Products",
+                          "comment": "Food",
+                          "sum": 500,
+                          "owner": "ObjectId"
+                        },
+                        "balance": 2000
+                      }
                     }
                   }
                 }
@@ -598,10 +612,16 @@
             "required": true,
             "name": "bearerAuth",
             "description": "User's token",
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string"
+            }
           }
         ],
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -982,15 +1002,21 @@
                       "example": "Transaction deleted."
                     },
                     "data": {
-                      "transaction": {
-                        "date": "28.09.2023",
-                        "income": "false",
-                        "category": "car",
-                        "comment": "change oil",
-                        "sum": 250,
-                        "owner": "ObjectId"
-                      },
-                      "balance": 2000
+                      "type": "object",
+                      "description": "responses data",
+                      "example": {
+                        "data": {
+                          "transaction": {
+                            "date": "28.09.2023",
+                            "income": "false",
+                            "category": "car",
+                            "comment": "change oil",
+                            "sum": 250,
+                            "owner": "ObjectId"
+                          },
+                          "balance": 2000
+                        }
+                      }
                     }
                   }
                 }
@@ -1052,24 +1078,34 @@
             "required": true,
             "name": "month",
             "description": "Number of month to filter.",
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "in": "query",
             "required": true,
             "name": "year",
             "description": "Number of year to filter.",
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "in": "header",
             "required": true,
             "name": "bearerAuth",
             "description": "User's token",
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string"
+            }
           }
         ],
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
