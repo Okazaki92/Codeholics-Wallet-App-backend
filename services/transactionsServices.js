@@ -6,7 +6,7 @@ const getTransactions = async (query, userId) => {
   const startIndex = (page - 1) * limit;
 
   return Transaction.find({ owner: userId })
-    .sort({ date: 1 })
+    .sort({ date: -1 })
     .skip(startIndex)
     .limit(limit);
 };
