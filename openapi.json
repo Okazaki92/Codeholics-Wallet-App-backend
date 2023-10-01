@@ -32,7 +32,9 @@
   "paths": {
     "/api/users/register": {
       "post": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "User registration",
         "parameters": [],
         "requestBody": {
@@ -151,7 +153,9 @@
     },
     "/api/users/login": {
       "post": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "User authentification",
         "parameters": [],
         "requestBody": {
@@ -161,7 +165,10 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["email", "password"],
+                "required": [
+                  "email",
+                  "password"
+                ],
                 "properties": {
                   "email": {
                     "type": "string",
@@ -346,7 +353,9 @@
     },
     "/api/users/logout": {
       "get": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "User logout",
         "parameters": [
           {
@@ -445,7 +454,9 @@
     },
     "/api/transactions/": {
       "post": {
-        "tags": ["Transactions"],
+        "tags": [
+          "Transactions"
+        ],
         "summary": "Add user's transaction",
         "parameters": [
           {
@@ -604,7 +615,9 @@
         }
       },
       "get": {
-        "tags": ["Transactions"],
+        "tags": [
+          "Transactions"
+        ],
         "summary": "Get user transactions",
         "parameters": [
           {
@@ -791,7 +804,9 @@
     },
     "/api/transactions/:transactionId": {
       "get": {
-        "tags": ["Transactions"],
+        "tags": [
+          "Transactions"
+        ],
         "summary": "Get transaction",
         "parameters": [],
         "responses": {
@@ -882,7 +897,9 @@
         }
       },
       "patch": {
-        "tags": ["Transactions"],
+        "tags": [
+          "Transactions"
+        ],
         "summary": "Update Transaction",
         "parameters": [],
         "responses": {
@@ -975,7 +992,9 @@
         }
       },
       "delete": {
-        "tags": ["Transactions"],
+        "tags": [
+          "Transactions"
+        ],
         "summary": "Delete transaction",
         "parameters": [],
         "responses": {
@@ -1070,7 +1089,9 @@
     },
     "/api/statistics": {
       "get": {
-        "tags": ["Statistics"],
+        "tags": [
+          "Statistics"
+        ],
         "summary": "Get user's statistics",
         "parameters": [
           {
@@ -1228,7 +1249,11 @@
     "schemas": {
       "User": {
         "type": "object",
-        "required": ["name", "email", "password"],
+        "required": [
+          "name",
+          "email",
+          "password"
+        ],
         "properties": {
           "_id": {
             "type": "string",
@@ -1264,7 +1289,11 @@
       },
       "Transaction": {
         "type": "object",
-        "required": ["date", "income", "sum"],
+        "required": [
+          "date",
+          "income",
+          "sum"
+        ],
         "properties": {
           "_id": {
             "type": "string",
