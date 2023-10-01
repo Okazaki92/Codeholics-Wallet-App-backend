@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const user = new Schema({
   name: {
     type: String,
-    require: [true, "First Name is required"],
+    require: [true, "Name is required"],
   },
   password: {
     type: String,

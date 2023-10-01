@@ -1,18 +1,18 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "version": "1.0.1",
     "title": "WalletAPI",
-    "description": "REST API Application",
-    "license": {
-      "name": "Apache 2.0",
-      "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
-    }
+    "version": "1.0.1",
+    "description": "Wallet REST API"
   },
   "servers": [
     {
       "url": "http://localhost:3000",
-      "description": "API base URL"
+      "description": "Local development server"
+    },
+    {
+      "url": "https://codeholics-wallet-app-c8b1a2de9f25.herokuapp.com/",
+      "description": "Production server"
     }
   ],
   "tags": [
@@ -27,6 +27,10 @@
     {
       "name": "Statistics",
       "description": "Statistics endpoints"
+    },
+    {
+      "name": "Categories",
+      "description": "Categories endpoints"
     }
   ],
   "paths": {
@@ -42,6 +46,10 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/User"
+              },
+              "example": {
+                "email": "test1234@test.net",
+                "password": "12345678"
               }
             }
           }
@@ -57,7 +65,7 @@
                     "status": {
                       "type": "string",
                       "description": "responses status",
-                      "example": "success"
+                      "example": "Success"
                     },
                     "code": {
                       "type": "string",
@@ -73,8 +81,9 @@
                       "type": "object",
                       "description": "responses data",
                       "example": {
-                        "name": "John",
-                        "email": "john@mail.com"
+                        "token": "62e42ea67d8857b38579497dtyjgfthd658",
+                        "email": "john@mail.com",
+                        "name": "John"
                       }
                     }
                   }
@@ -89,9 +98,24 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": {
+                    "status": {
                       "type": "string",
-                      "example": "Invalid data"
+                      "description": "responses status",
+                      "example": "Bad Request"
+                    },
+                    "code": {
+                      "type": "number",
+                      "description": "responses code",
+                      "example": 400
+                    },
+                    "ResponseBody": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Input data validation error"
+                        }
+                      }
                     }
                   }
                 }
@@ -105,6 +129,16 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Not Found"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "404"
+                    },
                     "message": {
                       "type": "string",
                       "example": "Not found"
@@ -121,9 +155,19 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Conflict"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "409"
+                    },
                     "message": {
                       "type": "string",
-                      "example": "This email in use yet"
+                      "example": "Email is already in use"
                     }
                   }
                 }
@@ -1235,11 +1279,6 @@
             "description": "User's id",
             "example": "62e42ea67d8857b38579497d"
           },
-          "email": {
-            "type": "string",
-            "description": "User's email",
-            "example": "john@mail.com"
-          },
           "name": {
             "type": "string",
             "description": "User's name",
@@ -1250,15 +1289,30 @@
             "description": "User's password",
             "example": "$2b$10$BB6rC4v06a7HxUp3ZWKGQmLJqokfsI55/r2XO9o5bvQlQZEXu"
           },
-          "token": {
+          "email": {
             "type": "string",
-            "description": "User's token",
-            "example": "eyJhbGciOiJIUzI1NiIsInR5IkpXVCJ9.eyJpZCI6IjYyZTQyZWE2N2Q4ODU3YjM4NTc5NDk3ZCIsImlhdCI6MTY1OTEyNjg0NSw"
+            "description": "User's email",
+            "example": "john@mail.com"
           },
           "balance": {
             "type": "number",
             "description": "User's balance",
             "example": 9890
+          },
+          "token": {
+            "type": "string",
+            "description": "User's token",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5IkpXVCJ9.eyJpZCI6IjYyZTQyZWE2N2Q4ODU3YjM4NTc5NDk3ZCIsImlhdCI6MTY1OTEyNjg0NSw"
+          },
+          "verify": {
+            "type": "boolean",
+            "description": "isVerification",
+            "example": false
+          },
+          "verificationToken": {
+            "type": "string",
+            "description": "Verification token",
+            "example": "true"
           }
         }
       },
