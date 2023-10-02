@@ -16,13 +16,11 @@ const { handle404, handle500 } = require("./utils/handleErrors");
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 const CSS_URL =
   "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
-  
+
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
-
-
 
 app.use(
   "/api-docs",
