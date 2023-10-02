@@ -91,7 +91,8 @@ const login = async (req, res, next) => {
 
     const token = jwt.sign(payload, secret, { expiresIn: "1h" });
     const update = await updateUser(user._id, { token });
-    handle200(res, "", {
+    console.log("uds", user);
+    handle200(res, `Welcome ${user.name}`, {
       token: update.token,
       user: {
         email: user.email,
@@ -141,7 +142,7 @@ const sendVerifyToken = async (req, res, next) => {
 
     const user = await getUserByEmail({ email });
     if (!user) {
-      return handle400(res, "No user");
+      return handle404(res, "Not Found");
     }
     if (user.verify) {
       return handle400(res, "Verification has already been passed");
@@ -160,7 +161,7 @@ const currentUser = async (req, res, next) => {
 
     const user = await getUserById(_id);
     if (!user) {
-      return handle401(res, "Not authorized");
+      return handle404(res, "Not Found");
     }
 
     const { email, name, balance, id, token } = user;

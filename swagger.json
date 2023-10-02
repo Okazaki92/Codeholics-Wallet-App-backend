@@ -45,10 +45,11 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/User"
+                "$ref": "#/components/schemas/registerSchema"
               },
               "example": {
-                "email": "test1234@test.net",
+                "name": "Jan",
+                "email": "jankowalski@test.net",
                 "password": "12345678"
               }
             }
@@ -204,18 +205,11 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "required": ["email", "password"],
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "example": "john@mail.com"
-                  },
-                  "password": {
-                    "type": "string",
-                    "example": "john123"
-                  }
-                }
+                "$ref": "#/components/schemas/loginSchema"
+              },
+              "example": {
+                "email": "jankowalski@test.net",
+                "password": "12345678"
               }
             }
           }
@@ -231,7 +225,7 @@
                     "status": {
                       "type": "string",
                       "description": "responses status",
-                      "example": "success"
+                      "example": "Success"
                     },
                     "code": {
                       "type": "string",
@@ -241,7 +235,7 @@
                     "message": {
                       "type": "string",
                       "description": "responses message",
-                      "example": "Welcome, John!"
+                      "example": "Welcome, Jan!"
                     },
                     "data": {
                       "type": "object",
@@ -249,87 +243,11 @@
                       "example": {
                         "token": "62e42ea67d8857b38579497dtyjgfthd658",
                         "user": {
-                          "name": "John",
-                          "email": "john@mail.com",
-                          "balance": 996470
-                        },
-                        "lastTransactions": [
-                          {
-                            "_id": "62e42ea67d8857b38579497d",
-                            "amount": 500,
-                            "isIncome": false,
-                            "category": "Self",
-                            "date": "22-09-2023",
-                            "month": 9,
-                            "year": 2023,
-                            "comment": "Video games",
-                            "balance": 995000,
-                            "owner": "62e42ea67d8857",
-                            "createdAt": "2023-09-22T09:09:04.419Z",
-                            "updatedAt": "2023-09-22T09:09:04.419Z",
-                            "categoryId": "2222244444"
-                          },
-                          {
-                            "_id": "62e42ea67d8857b3857",
-                            "amount": 500,
-                            "isIncome": false,
-                            "category": "Products",
-                            "date": "22-09-2023",
-                            "month": 9,
-                            "year": 2023,
-                            "comment": "Bread",
-                            "balance": 995500,
-                            "owner": "62e42ea67d8857b38579497d",
-                            "createdAt": "2023-09-22T08:48:19.614Z",
-                            "updatedAt": "2023-09-22T08:48:19.614Z",
-                            "categoryId": "2222222222"
-                          },
-                          {
-                            "_id": "62e42ea67d8857b3857949",
-                            "amount": 123,
-                            "isIncome": false,
-                            "category": "Products",
-                            "date": "22-09-2023",
-                            "month": 9,
-                            "year": 2023,
-                            "comment": "Bread",
-                            "balance": 996000,
-                            "owner": "62e42ea67d8857b3",
-                            "createdAt": "2023-09-22T08:34:26.038Z",
-                            "updatedAt": "2023-09-22T08:34:26.038Z",
-                            "categoryId": "2222222222"
-                          },
-                          {
-                            "_id": "62e42ea67d8857b385794a",
-                            "amount": 50,
-                            "isIncome": false,
-                            "category": "Products",
-                            "date": "22-09-2023",
-                            "month": 9,
-                            "year": 2023,
-                            "comment": "Tea",
-                            "balance": 996123,
-                            "owner": "62e42ea67d8857b38579497d",
-                            "createdAt": "2023-09-22T08:34:06.912Z",
-                            "updatedAt": "2023-09-22T08:34:06.912Z",
-                            "categoryId": "2222222222"
-                          },
-                          {
-                            "_id": "62e42ea67d8857b38579497dad45",
-                            "amount": 99,
-                            "isIncome": false,
-                            "category": "Products",
-                            "date": "22-09-2023",
-                            "month": 9,
-                            "year": 2023,
-                            "comment": "Food",
-                            "balance": 996173,
-                            "owner": "62e42ea67d8857b38579497d67456",
-                            "createdAt": "2023-09-22T08:33:48.108Z",
-                            "updatedAt": "2023-09-22T08:33:48.108Z",
-                            "categoryId": "2222222222"
-                          }
-                        ]
+                          "email": "jankowalski@test.net",
+                          "_id": "62e42ea67d8857b38579497d",
+                          "balance": 996470,
+                          "name": "Jan"
+                        }
                       }
                     }
                   }
@@ -344,9 +262,45 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Bad Request"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "400"
+                    },
                     "message": {
                       "type": "string",
-                      "example": "Invalid data"
+                      "example": "Input data validation error:"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Unauthorized"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "401"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "email is not verifed"
                     }
                   }
                 }
@@ -360,9 +314,137 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Not Found"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "404"
+                    },
                     "message": {
                       "type": "string",
-                      "example": "Not found"
+                      "example": "Not Found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Try later please"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/verify": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Send email for verification",
+        "parameters": [],
+        "requestBody": {
+          "description": "Authentification's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/verifySchema"
+              },
+              "example": {
+                "email": "jankowalski@test.net"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Success"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "200"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "responses message",
+                      "example": "WVerification email sent"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Bad Request"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "400"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Input data validation error:"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Not Found"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "404"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Not Found"
                     }
                   }
                 }
@@ -389,7 +471,7 @@
       }
     },
     "/api/users/logout": {
-      "get": {
+      "post": {
         "tags": ["Users"],
         "summary": "User logout",
         "parameters": [
@@ -409,29 +491,13 @@
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "description": "responses status",
-                      "example": "success"
-                    },
-                    "code": {
-                      "type": "string",
-                      "description": "responses code",
-                      "example": "200"
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "responses message",
-                      "example": "Success! User logout"
-                    }
-                  }
+                  "properties": {}
                 }
               }
             }
@@ -443,9 +509,81 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Unauthorized"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "401"
+                    },
                     "message": {
                       "type": "string",
-                      "example": "Please relogin and try again"
+                      "example": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Try later please"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/verify/:verificationToken": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Verify User",
+        "parameters": [
+          {
+            "in": "path",
+            "required": true,
+            "name": "verificationToken",
+            "description": "User's verify token",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Success"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "200"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "responses message",
+                      "example": "Verification successful"
                     }
                   }
                 }
@@ -453,12 +591,126 @@
             }
           },
           "404": {
-            "description": "Not found",
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Not Found"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "404"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Try later please"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/current": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Verify User",
+        "parameters": [
+          {
+            "in": "header",
+            "required": true,
+            "name": "bearerAuth",
+            "description": "User's token",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Success"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "201"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "responses message",
+                      "example": ""
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "responses data",
+                      "example": {
+                        "id": "62e42ea67d8857b38579497d",
+                        "email": "jankowalski@test.net",
+                        "name": "Jan",
+                        "balance": 996470,
+                        "token": "62e42ea67d8857b38579497dtyjgfthd658"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Not Found"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "404"
+                    },
                     "message": {
                       "type": "string",
                       "example": "Not found"
@@ -1270,49 +1522,51 @@
   },
   "components": {
     "schemas": {
-      "User": {
+      "registerSchema": {
         "type": "object",
         "required": ["name", "email", "password"],
         "properties": {
-          "_id": {
-            "type": "string",
-            "description": "User's id",
-            "example": "62e42ea67d8857b38579497d"
-          },
           "name": {
             "type": "string",
             "description": "User's name",
-            "example": "John"
-          },
-          "password": {
-            "type": "string",
-            "description": "User's password",
-            "example": "$2b$10$BB6rC4v06a7HxUp3ZWKGQmLJqokfsI55/r2XO9o5bvQlQZEXu"
+            "example": "Jan"
           },
           "email": {
             "type": "string",
             "description": "User's email",
-            "example": "john@mail.com"
+            "example": "jankowalski@test.net"
           },
-          "balance": {
-            "type": "number",
-            "description": "User's balance",
-            "example": 9890
-          },
-          "token": {
+          "password": {
             "type": "string",
-            "description": "User's token",
-            "example": "eyJhbGciOiJIUzI1NiIsInR5IkpXVCJ9.eyJpZCI6IjYyZTQyZWE2N2Q4ODU3YjM4NTc5NDk3ZCIsImlhdCI6MTY1OTEyNjg0NSw"
-          },
-          "verify": {
-            "type": "boolean",
-            "description": "isVerification",
-            "example": false
-          },
-          "verificationToken": {
+            "description": "User's password",
+            "example": "12345678"
+          }
+        }
+      },
+      "loginSchema": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
             "type": "string",
-            "description": "Verification token",
-            "example": "true"
+            "description": "User's email",
+            "example": "jankowalski@test.net"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "12345678"
+          }
+        }
+      },
+      "verifySchema": {
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "example": "jankowalski@test.net"
           }
         }
       },
