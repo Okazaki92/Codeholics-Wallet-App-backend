@@ -10,6 +10,9 @@ const getTransactions = async (query, userId) => {
     .skip(startIndex)
     .limit(limit);
 };
+const countTransactions = async (userId) => {
+  return Transaction.find({ owner: userId });
+};
 
 const addTransaction = async (userId, body) => {
   return Transaction.create({ owner: userId, ...body });
@@ -33,6 +36,7 @@ const update = async (transactionId, userId, body) => {
 
 module.exports = {
   getTransactions,
+  countTransactions,
   addTransaction,
   removeTransaction,
   getTransactionWithId,

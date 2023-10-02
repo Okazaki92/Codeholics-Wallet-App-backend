@@ -1,3 +1,4 @@
+const { use } = require("passport");
 const { validation } = require("../middlewares");
 const { transactionSchema } = require("../schemas/transactionSchema");
 const {
@@ -6,6 +7,7 @@ const {
   removeTransaction,
   getTransactionWithId,
   update,
+  countTransactions,
 } = require("../services/transactionsServices");
 const { handle200, handle201, handle404 } = require("../utils/handleErrors");
 const {
@@ -19,8 +21,10 @@ const getAllTransactions = async (req, res, next) => {
     const { query } = req;
     const userId = req.user.id;
     const results = await getTransactions(query, userId);
+    const total = await countTransactions(userId);
     handle200(res, "Success! Transactions received.", {
       transactions: results,
+      total: total.length,
     });
   } catch (error) {
     next(error);
