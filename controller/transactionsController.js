@@ -6,6 +6,7 @@ const {
   removeTransaction,
   getTransactionWithId,
   update,
+  countTransactions,
 } = require("../services/transactionsServices");
 const { handle200, handle201, handle404 } = require("../utils/handleErrors");
 const {
@@ -18,8 +19,10 @@ const getAllTransactions = async (req, res, next) => {
   try {
     const { query } = req;
     const userId = req.user.id;
+    const countAll = await countTransactions(userId);
     const results = await getTransactions(query, userId);
     handle200(res, "Success! Transactions received.", {
+      total: countAll.length,
       transactions: results,
     });
   } catch (error) {
