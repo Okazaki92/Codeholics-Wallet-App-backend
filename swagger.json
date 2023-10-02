@@ -1,18 +1,18 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "version": "1.0.1",
     "title": "WalletAPI",
-    "description": "REST API Application",
-    "license": {
-      "name": "Apache 2.0",
-      "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
-    }
+    "version": "1.0.1",
+    "description": "Wallet REST API"
   },
   "servers": [
     {
       "url": "http://localhost:3000",
-      "description": "API base URL"
+      "description": "Local development server"
+    },
+    {
+      "url": "https://codeholics-wallet-app-c8b1a2de9f25.herokuapp.com/",
+      "description": "Production server"
     }
   ],
   "tags": [
@@ -27,6 +27,10 @@
     {
       "name": "Statistics",
       "description": "Statistics endpoints"
+    },
+    {
+      "name": "Categories",
+      "description": "Categories endpoints"
     }
   ],
   "paths": {
@@ -41,7 +45,12 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/User"
+                "$ref": "#/components/schemas/registerSchema"
+              },
+              "example": {
+                "name": "Jan",
+                "email": "jankowalski@test.net",
+                "password": "12345678"
               }
             }
           }
@@ -57,7 +66,7 @@
                     "status": {
                       "type": "string",
                       "description": "responses status",
-                      "example": "success"
+                      "example": "Success"
                     },
                     "code": {
                       "type": "string",
@@ -73,8 +82,9 @@
                       "type": "object",
                       "description": "responses data",
                       "example": {
-                        "name": "John",
-                        "email": "john@mail.com"
+                        "tokenex": "62e42ea67d8857b38579497dtyjgfthd658",
+                        "email": "john@mail.com",
+                        "name": "John"
                       }
                     }
                   }
@@ -89,9 +99,24 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": {
+                    "status": {
                       "type": "string",
-                      "example": "Invalid data"
+                      "description": "responses status",
+                      "example": "Bad Request"
+                    },
+                    "code": {
+                      "type": "number",
+                      "description": "responses code",
+                      "example": 400
+                    },
+                    "ResponseBody": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Input data validation error"
+                        }
+                      }
                     }
                   }
                 }
@@ -105,6 +130,16 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Not Found"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "404"
+                    },
                     "message": {
                       "type": "string",
                       "example": "Not found"
@@ -121,9 +156,19 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Conflict"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "409"
+                    },
                     "message": {
                       "type": "string",
-                      "example": "This email in use yet"
+                      "example": "Email is already in use"
                     }
                   }
                 }
@@ -160,18 +205,11 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "required": ["email", "password"],
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "example": "john@mail.com"
-                  },
-                  "password": {
-                    "type": "string",
-                    "example": "john123"
-                  }
-                }
+                "$ref": "#/components/schemas/loginSchema"
+              },
+              "example": {
+                "email": "jankowalski@test.net",
+                "password": "12345678"
               }
             }
           }
@@ -187,7 +225,7 @@
                     "status": {
                       "type": "string",
                       "description": "responses status",
-                      "example": "success"
+                      "example": "Success"
                     },
                     "code": {
                       "type": "string",
@@ -197,95 +235,19 @@
                     "message": {
                       "type": "string",
                       "description": "responses message",
-                      "example": "Welcome, John!"
+                      "example": "Welcome, Jan!"
                     },
                     "data": {
                       "type": "object",
                       "description": "responses data",
                       "example": {
-                        "token": "62e42ea67d8857b38579497dtyjgfthd658",
+                        "tokenex": "62e42ea67d8857b38579497dtyjgfthd658",
                         "user": {
-                          "name": "John",
-                          "email": "john@mail.com",
-                          "balance": 996470
-                        },
-                        "lastTransactions": [
-                          {
-                            "_id": "62e42ea67d8857b38579497d",
-                            "amount": 500,
-                            "isIncome": false,
-                            "category": "Self",
-                            "date": "22-09-2023",
-                            "month": 9,
-                            "year": 2023,
-                            "comment": "Video games",
-                            "balance": 995000,
-                            "owner": "62e42ea67d8857",
-                            "createdAt": "2023-09-22T09:09:04.419Z",
-                            "updatedAt": "2023-09-22T09:09:04.419Z",
-                            "categoryId": "2222244444"
-                          },
-                          {
-                            "_id": "62e42ea67d8857b3857",
-                            "amount": 500,
-                            "isIncome": false,
-                            "category": "Products",
-                            "date": "22-09-2023",
-                            "month": 9,
-                            "year": 2023,
-                            "comment": "Bread",
-                            "balance": 995500,
-                            "owner": "62e42ea67d8857b38579497d",
-                            "createdAt": "2023-09-22T08:48:19.614Z",
-                            "updatedAt": "2023-09-22T08:48:19.614Z",
-                            "categoryId": "2222222222"
-                          },
-                          {
-                            "_id": "62e42ea67d8857b3857949",
-                            "amount": 123,
-                            "isIncome": false,
-                            "category": "Products",
-                            "date": "22-09-2023",
-                            "month": 9,
-                            "year": 2023,
-                            "comment": "Bread",
-                            "balance": 996000,
-                            "owner": "62e42ea67d8857b3",
-                            "createdAt": "2023-09-22T08:34:26.038Z",
-                            "updatedAt": "2023-09-22T08:34:26.038Z",
-                            "categoryId": "2222222222"
-                          },
-                          {
-                            "_id": "62e42ea67d8857b385794a",
-                            "amount": 50,
-                            "isIncome": false,
-                            "category": "Products",
-                            "date": "22-09-2023",
-                            "month": 9,
-                            "year": 2023,
-                            "comment": "Tea",
-                            "balance": 996123,
-                            "owner": "62e42ea67d8857b38579497d",
-                            "createdAt": "2023-09-22T08:34:06.912Z",
-                            "updatedAt": "2023-09-22T08:34:06.912Z",
-                            "categoryId": "2222222222"
-                          },
-                          {
-                            "_id": "62e42ea67d8857b38579497dad45",
-                            "amount": 99,
-                            "isIncome": false,
-                            "category": "Products",
-                            "date": "22-09-2023",
-                            "month": 9,
-                            "year": 2023,
-                            "comment": "Food",
-                            "balance": 996173,
-                            "owner": "62e42ea67d8857b38579497d67456",
-                            "createdAt": "2023-09-22T08:33:48.108Z",
-                            "updatedAt": "2023-09-22T08:33:48.108Z",
-                            "categoryId": "2222222222"
-                          }
-                        ]
+                          "email": "jankowalski@test.net",
+                          "_id": "62e42ea67d8857b38579497d",
+                          "balance": 996470,
+                          "name": "Jan"
+                        }
                       }
                     }
                   }
@@ -300,9 +262,45 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Bad Request"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "400"
+                    },
                     "message": {
                       "type": "string",
-                      "example": "Invalid data"
+                      "example": "Input data validation error:"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Unauthorized"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "401"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "email is not verifed"
                     }
                   }
                 }
@@ -316,9 +314,137 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Not Found"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "404"
+                    },
                     "message": {
                       "type": "string",
-                      "example": "Not found"
+                      "example": "Not Found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Try later please"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/verify": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Send email for verification",
+        "parameters": [],
+        "requestBody": {
+          "description": "Authentification's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/verifySchema"
+              },
+              "example": {
+                "email": "jankowalski@test.net"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Success"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "200"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "responses message",
+                      "example": "WVerification email sent"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Bad Request"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "400"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Input data validation error:"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Not Found"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "404"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Not Found"
                     }
                   }
                 }
@@ -365,29 +491,13 @@
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "description": "responses status",
-                      "example": "success"
-                    },
-                    "code": {
-                      "type": "string",
-                      "description": "responses code",
-                      "example": "200"
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "responses message",
-                      "example": "Success! User logout"
-                    }
-                  }
+                  "properties": {}
                 }
               }
             }
@@ -399,9 +509,81 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Unauthorized"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "401"
+                    },
                     "message": {
                       "type": "string",
-                      "example": "Please relogin and try again"
+                      "example": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Try later please"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/verify/:verificationToken": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Verify User",
+        "parameters": [
+          {
+            "in": "path",
+            "required": true,
+            "name": "verificationToken",
+            "description": "User's verify token",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Success"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "200"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "responses message",
+                      "example": "Verification successful"
                     }
                   }
                 }
@@ -409,12 +591,126 @@
             }
           },
           "404": {
-            "description": "Not found",
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Not Found"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "404"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Try later please"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/current": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Verify User",
+        "parameters": [
+          {
+            "in": "header",
+            "required": true,
+            "name": "bearerAuth",
+            "description": "User's token",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Success"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "201"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "responses message",
+                      "example": ""
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "responses data",
+                      "example": {
+                        "id": "62e42ea67d8857b38579497d",
+                        "email": "jankowalski@test.net",
+                        "name": "Jan",
+                        "balance": 996470,
+                        "tokenex": "62e42ea67d8857b38579497dtyjgfthd658"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Not Found"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "404"
+                    },
                     "message": {
                       "type": "string",
                       "example": "Not found"
@@ -469,7 +765,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Transaction"
+                "$ref": "#/components/schemas/transactionSchema"
               }
             }
           }
@@ -502,12 +798,14 @@
                       "description": "responses data",
                       "example": {
                         "transaction": {
-                          "date": "28-09-2023",
                           "income": false,
                           "category": "Products",
-                          "comment": "Food",
                           "sum": 500,
-                          "owner": "ObjectId"
+                          "owner": "650f49b0dca52988e5d19f2",
+                          "_id": "151ad019b9c377a6e8cc66",
+                          "date": "2023-10-02T14:13:45.557Z",
+                          "createdAt": "2023-10-02T14:13:45.568Z",
+                          "updatedAt": "2023-10-02T14:13:45.568Z"
                         },
                         "balance": 2000
                       }
@@ -524,9 +822,24 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": {
+                    "status": {
                       "type": "string",
-                      "example": "Invalid data"
+                      "description": "responses status",
+                      "example": "Bad Request"
+                    },
+                    "code": {
+                      "type": "number",
+                      "description": "responses code",
+                      "example": 400
+                    },
+                    "ResponseBody": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Input data validation error"
+                        }
+                      }
                     }
                   }
                 }
@@ -552,7 +865,7 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Please relogin and try again"
+                      "example": "Unauthorized"
                     }
                   }
                 }
@@ -615,6 +928,22 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "description": "Number transaction's page",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "Limit transaction per page",
+            "schema": {
+              "type": "number"
+            }
           }
         ],
         "security": [
@@ -649,76 +978,56 @@
                       "type": "object",
                       "description": "responses data",
                       "example": {
-                        "result": [
+                        "transactions": [
                           {
-                            "_id": "62e42ea67d8857b38579497d65452sdd",
-                            "amount": 99,
-                            "isIncome": false,
-                            "category": "Products",
-                            "categoryId": "",
-                            "date": "09-22-2023",
-                            "month": 9,
-                            "year": 2023,
-                            "comment": "Food",
-                            "owner": "62e42ea67d8857b38579497d",
-                            "createdAt": "2023-09-22T21:14:53.661Z",
-                            "updatedAt": "2023-09-22T21:14:53.661Z"
+                            "_id": "62e42ea45646857b38579497d65452sdd",
+                            "income": false,
+                            "category": "other expenses",
+                            "sum": 70,
+                            "owner": "650fdgdg5dhdgd5d19f28",
+                            "date": "2023-10-02T14:13:45.557Z",
+                            "createdAt": "2023-10-02T14:13:45.568Z",
+                            "updatedAt": "2023-10-02T14:13:45.568Z"
                           },
                           {
-                            "_id": "62e42ea67d8857b38579497dfty545",
-                            "amount": 22,
-                            "isIncome": false,
-                            "category": "Kids",
-                            "categoryId": "",
-                            "date": "22-09-2023",
-                            "month": 4,
-                            "year": 2023,
-                            "comment": "Cola",
-                            "owner": "62e42ea67d8857b385",
-                            "createdAt": "2023-09-22T20:36:11.830Z",
-                            "updatedAt": "2023-09-22T20:36:11.830Z"
+                            "_id": "62e42ea45646dfg8579497d65452sdd",
+                            "income": false,
+                            "category": "other expenses",
+                            "sum": 70,
+                            "owner": "650fdgdg5dhdgd5d19f28",
+                            "date": "2023-10-02T14:13:45.557Z",
+                            "createdAt": "2023-10-02T14:13:45.568Z",
+                            "updatedAt": "2023-10-02T14:13:45.568Z"
                           },
                           {
-                            "_id": "62e42ea67d8857b38579497d",
-                            "amount": 212,
-                            "isIncome": false,
-                            "category": "Kids",
-                            "categoryId": "",
-                            "date": "03-09-2023",
-                            "month": 3,
-                            "year": 2023,
-                            "comment": "Cinema",
-                            "owner": "asd62e42ea67d8857b38579497d",
-                            "createdAt": "2023-09-22T20:36:34.760Z",
-                            "updatedAt": "2023-09-22T20:35:54.682Z"
+                            "_id": "62e4hdh8579497d65452sdd",
+                            "income": false,
+                            "category": "other expenses",
+                            "sum": 70,
+                            "owner": "650fdgdg5dhdgd5d19f28",
+                            "date": "2023-10-02T14:13:45.557Z",
+                            "createdAt": "2023-10-02T14:13:45.568Z",
+                            "updatedAt": "2023-10-02T14:13:45.568Z"
                           },
                           {
-                            "_id": "jyty5462e42ea67d8857b38579497d",
-                            "amount": 202,
-                            "isIncome": false,
-                            "category": "Car",
-                            "categoryId": "",
-                            "date": "04-09-2023",
-                            "month": 4,
-                            "year": 2023,
-                            "comment": "LPG",
-                            "owner": "62e42ea67d885",
-                            "createdAt": "2023-09-22T20:35:54.682Z",
-                            "updatedAt": "2023-09-22T20:35:54.682Z"
+                            "_id": "62e42ffff38579497d65452sdd",
+                            "income": false,
+                            "category": "other expenses",
+                            "sum": 70,
+                            "owner": "650fdgdg5dhdgd5d19f28",
+                            "date": "2023-10-02T14:13:45.557Z",
+                            "createdAt": "2023-10-02T14:13:45.568Z",
+                            "updatedAt": "2023-10-02T14:13:45.568Z"
                           },
                           {
-                            "_id": "62e42ea67d8857b38579497l",
-                            "amount": 202,
-                            "isIncome": false,
-                            "category": "Car",
-                            "categoryId": "",
-                            "date": "04-09-2023",
-                            "month": 4,
-                            "year": 2023,
-                            "comment": "Oil",
-                            "owner": "62e42ea67d8857b3857949743",
-                            "createdAt": "2023-09-22T20:35:54.682Z",
-                            "updatedAt": "2023-09-22T20:35:54.682Z"
+                            "_id": "62e42hjdfsaj57b38579497d65452sdd",
+                            "income": false,
+                            "category": "other expenses",
+                            "sum": 70,
+                            "owner": "650fdgdg5dhdgd5d19f28",
+                            "date": "2023-10-02T14:13:45.557Z",
+                            "createdAt": "2023-10-02T14:13:45.568Z",
+                            "updatedAt": "2023-10-02T14:13:45.568Z"
                           }
                         ]
                       }
@@ -747,23 +1056,7 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Please relogin and try again"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Not found"
+                      "example": "Unauthorized"
                     }
                   }
                 }
@@ -793,7 +1086,31 @@
       "get": {
         "tags": ["Transactions"],
         "summary": "Get transaction",
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "header",
+            "required": true,
+            "name": "bearerAuth",
+            "description": "User's token",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "required": true,
+            "name": "transactionId",
+            "description": "Id transaction",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -814,20 +1131,22 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Success ! Transaction received"
+                      "example": "Success ! Transaction received."
                     },
                     "data": {
                       "type": "object",
                       "description": "responses data",
                       "example": {
                         "data": {
-                          "transaction": {
-                            "date": "28.09.2023",
-                            "income": "false",
+                          "result": {
+                            "_id": "6510aedgdfg5834d44f3760a",
+                            "income": false,
                             "category": "car",
-                            "comment": "change oil",
-                            "sum": 250,
-                            "owner": "ObjectId"
+                            "sum": 3000,
+                            "owner": "650f49b0gret52988e5d19f28",
+                            "date": "2023-09-24T21:48:57.215Z",
+                            "createdAt": "2023-09-24T21:48:57.216Z",
+                            "updatedAt": "2023-09-24T21:48:57.216Z"
                           }
                         }
                       }
@@ -847,7 +1166,7 @@
                     "status": {
                       "type": "string",
                       "description": "responses status",
-                      "example": "Error"
+                      "example": "Not Found"
                     },
                     "code": {
                       "type": "string",
@@ -884,7 +1203,42 @@
       "patch": {
         "tags": ["Transactions"],
         "summary": "Update Transaction",
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "header",
+            "required": true,
+            "name": "bearerAuth",
+            "description": "User's token",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "required": true,
+            "name": "transactionId",
+            "description": "Id transaction",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Transaction's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/transactionSchema"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -906,22 +1260,49 @@
                     "message": {
                       "type": "string",
                       "description": "responses message",
-                      "example": "Transaction update."
+                      "example": "Transaction update"
                     },
                     "data": {
+                      "result": {
+                        "_id": "6510fgd96e55854d44f3760a",
+                        "income": false,
+                        "category": "car",
+                        "sum": 170,
+                        "owner": "650f49bhfdh68e5d19f28",
+                        "date": "2023-09-24T21:48:57.215Z",
+                        "createdAt": "2023-09-24T21:48:57.216Z",
+                        "updatedAt": "2023-10-02T15:10:45.218Z"
+                      },
+                      "balance": 21718
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Bad Request"
+                    },
+                    "code": {
+                      "type": "number",
+                      "description": "responses code",
+                      "example": 400
+                    },
+                    "ResponseBody": {
                       "type": "object",
-                      "description": "responses data",
-                      "example": {
-                        "data": {
-                          "transaction": {
-                            "date": "28.09.2023",
-                            "income": "false",
-                            "category": "car",
-                            "comment": "change oil",
-                            "sum": 250,
-                            "owner": "ObjectId"
-                          },
-                          "balance": 2000
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Input data validation error"
                         }
                       }
                     }
@@ -945,11 +1326,11 @@
                     "code": {
                       "type": "string",
                       "description": "responses code",
-                      "example": "200"
+                      "example": "404"
                     },
                     "message": {
                       "type": "string",
-                      "example": "Not found"
+                      "example": "Transaction not found"
                     }
                   }
                 }
@@ -977,7 +1358,31 @@
       "delete": {
         "tags": ["Transactions"],
         "summary": "Delete transaction",
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "header",
+            "required": true,
+            "name": "bearerAuth",
+            "description": "User's token",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "required": true,
+            "name": "transactionId",
+            "description": "Id transaction",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -999,20 +1404,22 @@
                     "message": {
                       "type": "string",
                       "description": "responses message",
-                      "example": "Transaction deleted."
+                      "example": "Transaction deleted"
                     },
                     "data": {
                       "type": "object",
                       "description": "responses data",
                       "example": {
                         "data": {
-                          "transaction": {
-                            "date": "28.09.2023",
-                            "income": "false",
+                          "result": {
+                            "_id": "6510ertre7l55834d44f3760a",
+                            "income": false,
                             "category": "car",
-                            "comment": "change oil",
-                            "sum": 250,
-                            "owner": "ObjectId"
+                            "sum": 170,
+                            "owner": "650f4dfgs432988e5d19f28",
+                            "date": "2023-09-24T21:48:57.215Z",
+                            "createdAt": "2023-09-24T21:48:57.216Z",
+                            "updatedAt": "2023-10-02T15:10:45.218Z"
                           },
                           "balance": 2000
                         }
@@ -1134,16 +1541,14 @@
                       "description": "responses data",
                       "example": {
                         "data": {
-                          "result": [
+                          "arrCategory": [
                             {
-                              "Products": 3000
-                            },
-                            {
-                              "Car": 12000
+                              "other expenses": 140
                             }
                           ],
-                          "expense": 15000,
-                          "income": 0
+                          "expenses": 140,
+                          "income": 25000,
+                          "balance": 24860
                         }
                       }
                     }
@@ -1171,7 +1576,7 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Please relogin and try again"
+                      "example": "Unauthorized"
                     }
                   }
                 }
@@ -1197,7 +1602,123 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Not found"
+                      "example": "Not Found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Try later please"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/api/categories": {
+      "get": {
+        "tags": ["Categories"],
+        "summary": "Get categories",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "Success"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "200"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "responses message",
+                      "example": "Categories received"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "responses data",
+                      "example": {
+                        "_id": "651440fsgsda9a58d3de7",
+                        "data": [
+                          {
+                            "_id": "65sdgdfg841ec009a8fe",
+                            "type": "expense",
+                            "name": "main expenses",
+                            "color": "#FED057"
+                          },
+                          {
+                            "_id": "651ae8dgfsdg25c841ec009a8ff",
+                            "type": "expense",
+                            "name": "products",
+                            "color": "#FFD8D0"
+                          },
+                          {
+                            "_id": "651ae8dfg25c841ec009a900",
+                            "type": "expense",
+                            "name": "car",
+                            "color": "#FD9498"
+                          },
+                          {
+                            "_id": "651ae825dg41ec009a901",
+                            "type": "expense",
+                            "name": "self care",
+                            "color": "#C5BAFF"
+                          },
+                          {
+                            "_id": "651sg1ec009a902",
+                            "type": "expense",
+                            "name": "child care",
+                            "color": "#6E78E8"
+                          },
+                          {
+                            "_id": "651aesgd41ec009a903",
+                            "type": "expense",
+                            "name": "household products",
+                            "color": "#4A56E2"
+                          },
+                          {
+                            "_id": "651aesg41ec009a904",
+                            "type": "expense",
+                            "name": "education",
+                            "color": "#81E1FF"
+                          },
+                          {
+                            "_id": "651ae825dsg41ec009a905",
+                            "type": "expense",
+                            "name": "leisure",
+                            "color": "#24CCA7"
+                          },
+                          {
+                            "_id": "651aesdg841ec009a906",
+                            "type": "expense",
+                            "name": "other expenses",
+                            "color": "#00AD84"
+                          }
+                        ]
+                      }
                     }
                   }
                 }
@@ -1226,90 +1747,72 @@
   },
   "components": {
     "schemas": {
-      "User": {
+      "registerSchema": {
         "type": "object",
         "required": ["name", "email", "password"],
         "properties": {
-          "_id": {
+          "name": {
             "type": "string",
-            "description": "User's id",
-            "example": "62e42ea67d8857b38579497d"
+            "description": "User's name",
+            "example": "Jan"
           },
           "email": {
             "type": "string",
             "description": "User's email",
-            "example": "john@mail.com"
-          },
-          "name": {
-            "type": "string",
-            "description": "User's name",
-            "example": "John"
+            "example": "jankowalski@test.net"
           },
           "password": {
             "type": "string",
             "description": "User's password",
-            "example": "$2b$10$BB6rC4v06a7HxUp3ZWKGQmLJqokfsI55/r2XO9o5bvQlQZEXu"
-          },
-          "token": {
-            "type": "string",
-            "description": "User's token",
-            "example": "eyJhbGciOiJIUzI1NiIsInR5IkpXVCJ9.eyJpZCI6IjYyZTQyZWE2N2Q4ODU3YjM4NTc5NDk3ZCIsImlhdCI6MTY1OTEyNjg0NSw"
-          },
-          "balance": {
-            "type": "number",
-            "description": "User's balance",
-            "example": 9890
+            "example": "12345678"
           }
         }
       },
-      "Transaction": {
+      "loginSchema": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "example": "jankowalski@test.net"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "12345678"
+          }
+        }
+      },
+      "verifySchema": {
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "example": "jankowalski@test.net"
+          }
+        }
+      },
+      "transactionSchema": {
         "type": "object",
         "required": ["date", "income", "sum"],
         "properties": {
-          "_id": {
+          "date": {
             "type": "string",
-            "description": "Transaction's id",
-            "example": "62e44dcd1f01ddfdec6003"
+            "description": "Transaction's date",
+            "example": "2023-09-28"
           },
           "income": {
             "type": "boolean",
             "description": "Transaction's bool",
             "example": "false"
           },
-          "category": {
-            "type": "string",
-            "description": "Transaction's category",
-            "example": "Products"
-          },
-          "comment": {
-            "type": "string",
-            "description": "Transaction's comment",
-            "example": "Salt"
-          },
           "sum": {
             "type": "number",
             "description": "User's balance after operation",
             "example": 3500
-          },
-          "owner": {
-            "type": "string",
-            "description": "Transaction's owner",
-            "example": "62e42ea67d8857b38579497d"
-          },
-          "date": {
-            "type": "string",
-            "description": "Transaction's date",
-            "example": "2023-09-28"
-          },
-          "createdAt": {
-            "type": "string",
-            "description": "Transaction's create date",
-            "example": "2023-07-29T21:14:53.661Z"
-          },
-          "updatedAt": {
-            "type": "string",
-            "description": "Transaction's update date",
-            "example": "2023-07-29T21:14:53.661Z"
           }
         }
       }
