@@ -82,7 +82,7 @@
                       "type": "object",
                       "description": "responses data",
                       "example": {
-                        "token": "62e42ea67d8857b38579497dtyjgfthd658",
+                        "tokenex": "62e42ea67d8857b38579497dtyjgfthd658",
                         "email": "john@mail.com",
                         "name": "John"
                       }
@@ -241,7 +241,7 @@
                       "type": "object",
                       "description": "responses data",
                       "example": {
-                        "token": "62e42ea67d8857b38579497dtyjgfthd658",
+                        "tokenex": "62e42ea67d8857b38579497dtyjgfthd658",
                         "user": {
                           "email": "jankowalski@test.net",
                           "_id": "62e42ea67d8857b38579497d",
@@ -686,7 +686,7 @@
                         "email": "jankowalski@test.net",
                         "name": "Jan",
                         "balance": 996470,
-                        "token": "62e42ea67d8857b38579497dtyjgfthd658"
+                        "tokenex": "62e42ea67d8857b38579497dtyjgfthd658"
                       }
                     }
                   }
