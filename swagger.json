@@ -11,7 +11,7 @@
       "description": "Local development server"
     },
     {
-      "url": "https://codeholics-wallet-app-c8b1a2de9f25.herokuapp.com/",
+      "url": "https://codeholics-wallet-app-backend.vercel.app",
       "description": "Production server"
     }
   ],
