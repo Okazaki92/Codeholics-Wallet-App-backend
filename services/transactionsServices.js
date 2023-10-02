@@ -5,7 +5,10 @@ const getTransactions = async (query, userId) => {
   const limit = parseInt(query.limit) || 5;
   const startIndex = (page - 1) * limit;
 
-  return Transaction.find({ owner: userId }).skip(startIndex).limit(limit);
+  return Transaction.find({ owner: userId })
+    .sort({ date: -1 })
+    .skip(startIndex)
+    .limit(limit);
 };
 const countTransactions = async (userId) => {
   return Transaction.find({ owner: userId });

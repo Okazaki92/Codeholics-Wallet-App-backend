@@ -6,23 +6,8 @@ const cors = require("cors");
 require("dotenv").config();
 require("./config/passport-config");
 const app = express();
-// Konfiguracja Swagger
-const options = {
-  definition: {
-    openapi: "3.0.0",
-    info: {
-      title: "WalletAPI",
-      version: "1.0.1",
-    },
-  },
-  // Ścieżka do pliku z konfiguracją Swagger
-  apis: ["./swagger.json"],
-};
 
-const swaggerSpec = swaggerJsdoc(options);
-// Dodanie interfejsu Swagger do ścieżki /api-docs
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
+const swaggerDocument = require("./swagger.json");
 const userRouter = require("./routes/api/user");
 const transactionsRouter = require("./routes/api/transactions");
 const statisticsRouter = require("./routes/api/statistics");
@@ -35,6 +20,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
 
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/api/users", userRouter);
 app.use("/api/transactions", transactionsRouter);
 app.use("/api/statistics", statisticsRouter);
@@ -46,9 +32,8 @@ app.use((req, res) => {
   handle404(res, "Not Found");
 });
 app.use((err, req, res, next) => {
-  console.log('err:',err);
+  console.log("err:", err);
   handle500(res, err.message);
-  
 });
 
 module.exports = app;
