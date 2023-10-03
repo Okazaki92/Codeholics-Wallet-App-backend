@@ -220,7 +220,7 @@ const updateBalanceAfterChange = async (
   if (!transactionType) {
     newBalance = balance + oldTransactionSum - transactionSum;
   } else {
-    newBalance = balance - oldTransactionSum + transactionSum;
+    newBalance = balance + oldTransactionSum - transactionSum;
   }
 
   return await updateUser(userId, { balance: newBalance });
