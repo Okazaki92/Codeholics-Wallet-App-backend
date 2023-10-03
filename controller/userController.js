@@ -218,7 +218,7 @@ const updateBalanceAfterChange = async (
 ) => {
   let newBalance;
   if (!transactionType) {
-    newBalance = balance + oldTransactionSum - transactionSum;
+    newBalance = balance - oldTransactionSum + transactionSum;
   } else {
     newBalance = balance + oldTransactionSum - transactionSum;
   }
