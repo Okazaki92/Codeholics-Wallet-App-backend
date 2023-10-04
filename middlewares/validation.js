@@ -11,7 +11,6 @@ const validation = (req, res, schema) => {
   } else {
     return false;
   }
-  
 };
 
 module.exports = validation;

@@ -9,7 +9,12 @@ const {
   update,
   countTransactions,
 } = require("../services/transactionsServices");
-const { handle200, handle201, handle404, handle500 } = require("../utils/handleErrors");
+const {
+  handle200,
+  handle201,
+  handle404,
+  handle500,
+} = require("../utils/handleErrors");
 const {
   updateBalanceAfterChange,
   updateBalance,
@@ -42,8 +47,8 @@ const createTransaction = async (req, res, next) => {
     const balance = req.user.balance;
     const newTransaction = await addTransaction(userId, body);
     if (!newTransaction) {
-  return handle500(res, "Add transaction failed. Try later")
-    };
+      return handle500(res);
+    }
     // Update stanu konta
     const newBalance = await updateBalance(
       userId,
@@ -56,7 +61,7 @@ const createTransaction = async (req, res, next) => {
       balance: newBalance.balance,
     });
   } catch (error) {
-    next(error); 
+    next(error);
   }
 };
 
@@ -77,8 +82,8 @@ const deleteTransaction = async (req, res, next) => {
   // Update stanu konta po usunięciu transakcji
   const currentTransaction = await getTransactionWithId(transactionId, userId);
   if (!currentTransaction) {
-    return handle404(res, "Transaction Not Found")
-  };
+    return handle404(res, "Transaction Not Found");
+  }
   const newBalance = await updateBalanceAfterDelete(
     userId,
     balance,
