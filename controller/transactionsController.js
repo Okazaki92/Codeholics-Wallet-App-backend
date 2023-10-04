@@ -9,7 +9,12 @@ const {
   update,
   countTransactions,
 } = require("../services/transactionsServices");
-const { handle200, handle201, handle404 } = require("../utils/handleErrors");
+const {
+  handle200,
+  handle201,
+  handle404,
+  handle500,
+} = require("../utils/handleErrors");
 const {
   updateBalanceAfterChange,
   updateBalance,
@@ -28,7 +33,6 @@ const getAllTransactions = async (req, res, next) => {
     });
   } catch (error) {
     next(error);
-    // error dla 404 czy 401 czy oba z warunkiem ?
   }
 };
 
@@ -42,7 +46,9 @@ const createTransaction = async (req, res, next) => {
     const userId = req.user.id;
     const balance = req.user.balance;
     const newTransaction = await addTransaction(userId, body);
-
+    if (!newTransaction) {
+      return handle500(res);
+    }
     // Update stanu konta
     const newBalance = await updateBalance(
       userId,
@@ -55,8 +61,8 @@ const createTransaction = async (req, res, next) => {
       balance: newBalance.balance,
     });
   } catch (error) {
-    next(error); // Jesli to 400 to trzeba zgrac ze swagger
-  } // w swagger mamy obsługe dla 404 ale tu sie chyba nie wydarzy 404 ?
+    next(error);
+  }
 };
 
 const getTransactionById = async (req, res, next) => {
@@ -75,6 +81,9 @@ const deleteTransaction = async (req, res, next) => {
   const balance = req.user.balance;
   // Update stanu konta po usunięciu transakcji
   const currentTransaction = await getTransactionWithId(transactionId, userId);
+  if (!currentTransaction) {
+    return handle404(res, "Transaction Not Found");
+  }
   const newBalance = await updateBalanceAfterDelete(
     userId,
     balance,
@@ -101,7 +110,7 @@ const updateTransaction = async (req, res, next) => {
   const transactionId = req.params.transactionId;
   const oldSum = await getTransactionWithId(transactionId, userId);
   const result = await update(transactionId, userId, body);
-  if (!result) {
+  if (!result || !oldSum) {
     return handle404(res, "Transaction not found");
   }
   // Update stanu konta po aktualizacji

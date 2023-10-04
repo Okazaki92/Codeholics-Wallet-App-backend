@@ -1,4 +1,4 @@
-const { getAll, create } = require("../services/categoriesServices");
+const { getAll } = require("../services/categoriesServices");
 const { handle200 } = require("../utils/handleErrors");
 
 const getCategories = async (req, res, next) => {
