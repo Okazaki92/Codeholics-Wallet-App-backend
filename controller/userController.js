@@ -36,7 +36,6 @@ const register = async (req, res, next) => {
     }
 
     const { email, password, name } = req.body;
-
     const checkEmail = await getUserByEmail({ email });
 
     if (checkEmail) {
@@ -71,9 +70,7 @@ const login = async (req, res, next) => {
     }
 
     const { email, password } = req.body;
-
     const user = await getUserByEmail({ email });
-
     const passwordCompare = await bcrypt.compare(password, user.password);
 
     if (!user || !passwordCompare) {
@@ -91,7 +88,7 @@ const login = async (req, res, next) => {
 
     const token = jwt.sign(payload, secret, { expiresIn: "1h" });
     const update = await updateUser(user._id, { token });
-    console.log("uds", user);
+
     handle200(res, `Welcome ${user.name}`, {
       token: update.token,
       user: {
@@ -102,7 +99,6 @@ const login = async (req, res, next) => {
       },
     });
   } catch (error) {
-    console.log("uuuuuu");
     next(error);
   }
 };
@@ -139,10 +135,12 @@ const sendVerifyToken = async (req, res, next) => {
     // validation(userSchema);
 
     const { email } = req.body;
-
+    if (!email) {
+      return handle400(res, "Email is required");
+    }
     const user = await getUserByEmail({ email });
     if (!user) {
-      return handle404(res, "Not Found");
+      return handle404(res, "User Not Found");
     }
     if (user.verify) {
       return handle400(res, "Verification has already been passed");
@@ -161,7 +159,7 @@ const currentUser = async (req, res, next) => {
 
     const user = await getUserById(_id);
     if (!user) {
-      return handle404(res, "Not Found");
+      return handle404(res, "User Not Found");
     }
 
     const { email, name, balance, id, token } = user;
