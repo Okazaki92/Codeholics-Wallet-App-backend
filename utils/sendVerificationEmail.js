@@ -1,5 +1,5 @@
 const nodemailer = require("nodemailer");
-const { google } = require("googleapis");
+// const { google } = require("googleapis");
 require("dotenv").config();
 
 const transportOne = nodemailer.createTransport({
@@ -11,28 +11,36 @@ const transportOne = nodemailer.createTransport({
   },
 });
 
-const OAuth2 = google.auth.OAuth2;
-const oauth2Client = new OAuth2(
-  process.env.MAIL_USER,
-  process.env.MAIL_SECRET,
-  "https://developers.google.com/oauthplayground"
-);
+// const OAuth2 = google.auth.OAuth2;
+// const oauth2Client = new OAuth2(
+//   process.env.MAIL_USER,
+//   process.env.MAIL_SECRET,
+//   "https://developers.google.com/oauthplayground"
+// );
 
-oauth2Client.setCredentials({
-  refresh_token: process.env.MAIL_REFRESH_TOKEN,
-});
+// oauth2Client.setCredentials({
+//   refresh_token: process.env.MAIL_REFRESH_TOKEN,
+// });
 
-const accessToken = oauth2Client.getAccessToken();
+// const accessToken = oauth2Client.getAccessToken();
+
+// const transport = nodemailer.createTransport({
+//   service: "gmail",
+//   auth: {
+//     type: "OAuth2",
+//     user: process.env.MAIL,
+//     clientId: process.env.MAIL_USER,
+//     clientSecret: process.env.MAIL_SECRET,
+//     refreshToken: process.env.MAIL_REFRESH_TOKEN,
+//     accessToken: accessToken,
+//   },
+// });
 
 const transport = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    type: "OAuth2",
     user: process.env.MAIL,
-    clientId: process.env.MAIL_USER,
-    clientSecret: process.env.MAIL_SECRET,
-    refreshToken: process.env.MAIL_REFRESH_TOKEN,
-    accessToken: accessToken,
+    pass: process.env.MAIL_PASSWORD,
   },
 });
 
