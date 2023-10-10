@@ -7,7 +7,7 @@ const getStatistics = async (req, res, next) => {
 
   const transactionsByDate = await getTransactionsByDate(month, year, userId);
   if (!transactionsByDate) {
-    return handle404(res, "Not Found");
+    return handle404(res, "Transactions Not Found");
   }
   const arrCategory = [];
   let expenses = 0;
@@ -36,7 +36,7 @@ const getStatistics = async (req, res, next) => {
     income,
     balance,
   });
-}; 
+};
 
 module.exports = {
   getStatistics,
