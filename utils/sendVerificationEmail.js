@@ -35,7 +35,6 @@ const transportOne = nodemailer.createTransport({
 //     accessToken: accessToken,
 //   },
 // });
-
 const transport = nodemailer.createTransport({
   service: "gmail",
   auth: {
